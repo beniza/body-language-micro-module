@@ -81,6 +81,27 @@
     outline: 3px solid #1A5A8F;
     outline-offset: 2px;
   }
+
+  /* Lightbox */
+  #lightbox {
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s ease;
+  }
+  #lightbox.open {
+    opacity: 1;
+    visibility: visible;
+  }
+  #lightbox-img {
+    transform: scale(0.97);
+    transition: transform 0.2s ease;
+  }
+  #lightbox.open #lightbox-img {
+    transform: scale(1);
+  }
+  body.lightbox-locked {
+    overflow: hidden;
+  }
 </style>
 </head>
 <body class="bg-blush antialiased text-stone-800">
@@ -95,9 +116,13 @@
       </p>
 
       <div class="mt-8 rounded-3xl bg-white/80 backdrop-blur border border-white shadow-sm p-5 sm:p-6">
-        <div class="aspect-[16/9] w-full rounded-2xl overflow-hidden bg-warm-grey mb-5">
-          <img src="images/Image_1_Posture_and_Confidence.png" alt="A professional sits confidently at a welcoming office desk, ready to begin the module." class="w-full h-full object-cover" loading="lazy">
-        </div>
+        <button type="button" class="zoom-trigger group relative block w-full aspect-[16/9] rounded-2xl overflow-hidden bg-warm-grey mb-5 focus:outline-none" data-full-src="images/Image_1_Posture_and_Confidence.png" data-full-alt="A professional sits confidently at a welcoming office desk, ready to begin the module." aria-label="View larger image">
+          <img src="images/Image_1_Posture_and_Confidence.png" alt="A professional sits confidently at a welcoming office desk, ready to begin the module." class="w-full h-full object-contain" loading="lazy">
+          <span class="absolute bottom-2 right-2 inline-flex items-center gap-1.5 bg-sil-blue/90 text-white text-[10px] sm:text-xs font-bold uppercase tracking-wide px-2.5 py-1.5 rounded-full opacity-90 group-hover:opacity-100 transition-opacity pointer-events-none">
+            <svg class="w-3 h-3" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M7 3H3v4M13 3h4v4M7 17H3v-4M13 17h4v-4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Enlarge
+          </span>
+        </button>
         <h2 class="font-heading font-bold text-lg sm:text-xl text-stone-900 mb-2">Welcome — let's get started</h2>
         <p class="text-stone-700 leading-relaxed">
           Effective communicators adapt their body language to build understanding. Awareness of cultural differences in body language demonstrates respect, strengthens relationships, and helps prevent unintended misunderstandings.
@@ -152,9 +177,13 @@
         <!-- Card: Physical Posture -->
         <article class="topic-card relative rounded-3xl bg-blush-card border-2 border-stone-200 shadow-sm p-5 sm:p-6" data-topic="posture" data-part="part1">
           <span class="check-badge absolute -top-3 -right-3 w-9 h-9 rounded-full bg-sil-blue text-white flex items-center justify-center font-bold shadow-md" aria-hidden="true">✓</span>
-          <div class="aspect-[4/3] w-full rounded-2xl overflow-hidden bg-warm-grey mb-4">
-            <img src="images/Image_2a_Gestures_and_Meaning.png" alt="An office worker demonstrates facing the speaker, maintaining open posture, and avoiding crossed arms." class="w-full h-full object-cover" loading="lazy">
-          </div>
+          <button type="button" class="zoom-trigger group relative block w-full aspect-[16/9] rounded-2xl overflow-hidden bg-warm-grey mb-4 focus:outline-none" data-full-src="images/Image_2a_Gestures_and_Meaning.png" data-full-alt="An office worker demonstrates facing the speaker, maintaining open posture, and avoiding crossed arms." aria-label="View larger image">
+            <img src="images/Image_2a_Gestures_and_Meaning.png" alt="An office worker demonstrates facing the speaker, maintaining open posture, and avoiding crossed arms." class="w-full h-full object-contain" loading="lazy">
+            <span class="absolute bottom-2 right-2 inline-flex items-center gap-1.5 bg-sil-blue/90 text-white text-[10px] sm:text-xs font-bold uppercase tracking-wide px-2.5 py-1.5 rounded-full opacity-90 group-hover:opacity-100 transition-opacity pointer-events-none">
+              <svg class="w-3 h-3" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M7 3H3v4M13 3h4v4M7 17H3v-4M13 17h4v-4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              Enlarge
+            </span>
+          </button>
           <h3 class="font-heading font-extrabold text-lg text-stone-900 mb-1">Physical Posture</h3>
           <p class="text-xs font-semibold text-sil-blue-light uppercase tracking-wide mb-3">How you carry your body</p>
           <ul class="space-y-2 text-sm text-stone-700 leading-relaxed mb-5">
@@ -171,9 +200,13 @@
         <!-- Card: Physical Distance -->
         <article class="topic-card relative rounded-3xl bg-blush-card border-2 border-stone-200 shadow-sm p-5 sm:p-6" data-topic="distance" data-part="part1">
           <span class="check-badge absolute -top-3 -right-3 w-9 h-9 rounded-full bg-sil-blue text-white flex items-center justify-center font-bold shadow-md" aria-hidden="true">✓</span>
-          <div class="aspect-[4/3] w-full rounded-2xl overflow-hidden bg-warm-grey mb-4">
-            <img src="images/Image_3_Responsive_Communication.png" alt="Two colleagues talk at a desk, illustrating respecting personal space and leaning forward to listen." class="w-full h-full object-cover" loading="lazy">
-          </div>
+          <button type="button" class="zoom-trigger group relative block w-full aspect-[16/9] rounded-2xl overflow-hidden bg-warm-grey mb-4 focus:outline-none" data-full-src="images/Image_3_Responsive_Communication.png" data-full-alt="Two colleagues talk at a desk, illustrating respecting personal space and leaning forward to listen." aria-label="View larger image">
+            <img src="images/Image_3_Responsive_Communication.png" alt="Two colleagues talk at a desk, illustrating respecting personal space and leaning forward to listen." class="w-full h-full object-contain" loading="lazy">
+            <span class="absolute bottom-2 right-2 inline-flex items-center gap-1.5 bg-sil-blue/90 text-white text-[10px] sm:text-xs font-bold uppercase tracking-wide px-2.5 py-1.5 rounded-full opacity-90 group-hover:opacity-100 transition-opacity pointer-events-none">
+              <svg class="w-3 h-3" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M7 3H3v4M13 3h4v4M7 17H3v-4M13 17h4v-4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              Enlarge
+            </span>
+          </button>
           <h3 class="font-heading font-extrabold text-lg text-stone-900 mb-1">Physical Distance</h3>
           <p class="text-xs font-semibold text-sil-blue-light uppercase tracking-wide mb-3">How you position yourself</p>
           <ul class="space-y-2 text-sm text-stone-700 leading-relaxed mb-5">
@@ -189,9 +222,13 @@
         <!-- Card: Facial Expression -->
         <article class="topic-card relative rounded-3xl bg-blush-card border-2 border-stone-200 shadow-sm p-5 sm:p-6" data-topic="facial" data-part="part1">
           <span class="check-badge absolute -top-3 -right-3 w-9 h-9 rounded-full bg-sil-blue text-white flex items-center justify-center font-bold shadow-md" aria-hidden="true">✓</span>
-          <div class="aspect-[4/3] w-full rounded-2xl overflow-hidden bg-warm-grey mb-4">
-            <img src="images/Image_4_Facial_Expression.png" alt="A smiling professional illustrates eye contact, nodding, and matching emotional tone." class="w-full h-full object-cover" loading="lazy">
-          </div>
+          <button type="button" class="zoom-trigger group relative block w-full aspect-[16/9] rounded-2xl overflow-hidden bg-warm-grey mb-4 focus:outline-none" data-full-src="images/Image_4_Facial_Expression.png" data-full-alt="A smiling professional illustrates eye contact, nodding, and matching emotional tone." aria-label="View larger image">
+            <img src="images/Image_4_Facial_Expression.png" alt="A smiling professional illustrates eye contact, nodding, and matching emotional tone." class="w-full h-full object-contain" loading="lazy">
+            <span class="absolute bottom-2 right-2 inline-flex items-center gap-1.5 bg-sil-blue/90 text-white text-[10px] sm:text-xs font-bold uppercase tracking-wide px-2.5 py-1.5 rounded-full opacity-90 group-hover:opacity-100 transition-opacity pointer-events-none">
+              <svg class="w-3 h-3" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M7 3H3v4M13 3h4v4M7 17H3v-4M13 17h4v-4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              Enlarge
+            </span>
+          </button>
           <h3 class="font-heading font-extrabold text-lg text-stone-900 mb-1">Facial Expression</h3>
           <p class="text-xs font-semibold text-sil-blue-light uppercase tracking-wide mb-3">What your face communicates</p>
           <ul class="space-y-2 text-sm text-stone-700 leading-relaxed mb-5">
@@ -208,9 +245,13 @@
         <!-- Card: Demeanor -->
         <article class="topic-card relative rounded-3xl bg-blush-card border-2 border-stone-200 shadow-sm p-5 sm:p-6" data-topic="demeanor" data-part="part1">
           <span class="check-badge absolute -top-3 -right-3 w-9 h-9 rounded-full bg-sil-blue text-white flex items-center justify-center font-bold shadow-md" aria-hidden="true">✓</span>
-          <div class="aspect-[4/3] w-full rounded-2xl overflow-hidden bg-warm-grey mb-4">
-            <img src="images/Image_5_Demeanor.png" alt="A professional gestures naturally while speaking, illustrating a calm, matched demeanor." class="w-full h-full object-cover" loading="lazy">
-          </div>
+          <button type="button" class="zoom-trigger group relative block w-full aspect-[16/9] rounded-2xl overflow-hidden bg-warm-grey mb-4 focus:outline-none" data-full-src="images/Image_5_Demeanor.png" data-full-alt="A professional gestures naturally while speaking, illustrating a calm, matched demeanor." aria-label="View larger image">
+            <img src="images/Image_5_Demeanor.png" alt="A professional gestures naturally while speaking, illustrating a calm, matched demeanor." class="w-full h-full object-contain" loading="lazy">
+            <span class="absolute bottom-2 right-2 inline-flex items-center gap-1.5 bg-sil-blue/90 text-white text-[10px] sm:text-xs font-bold uppercase tracking-wide px-2.5 py-1.5 rounded-full opacity-90 group-hover:opacity-100 transition-opacity pointer-events-none">
+              <svg class="w-3 h-3" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M7 3H3v4M13 3h4v4M7 17H3v-4M13 17h4v-4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              Enlarge
+            </span>
+          </button>
           <h3 class="font-heading font-extrabold text-lg text-stone-900 mb-1">Demeanor</h3>
           <p class="text-xs font-semibold text-sil-blue-light uppercase tracking-wide mb-3">The attitude and tone you project</p>
           <ul class="space-y-2 text-sm text-stone-700 leading-relaxed mb-5">
@@ -239,9 +280,13 @@
 
       <!-- Cultural intro, non-checkbox context card -->
       <div class="rounded-3xl bg-mint border-2 border-emerald-100 shadow-sm p-5 sm:p-6 mb-5">
-        <div class="aspect-[16/9] w-full rounded-2xl overflow-hidden bg-warm-grey mb-4">
-          <img src="images/Image_6_Cultural_Differences.png" alt="A professional stands amid global icons, representing cultural awareness across communities." class="w-full h-full object-cover" loading="lazy">
-        </div>
+        <button type="button" class="zoom-trigger group relative block w-full aspect-[16/9] rounded-2xl overflow-hidden bg-warm-grey mb-4 focus:outline-none" data-full-src="images/Image_6_Cultural_Differences.png" data-full-alt="A professional stands amid global icons, representing cultural awareness across communities." aria-label="View larger image">
+          <img src="images/Image_6_Cultural_Differences.png" alt="A professional stands amid global icons, representing cultural awareness across communities." class="w-full h-full object-contain" loading="lazy">
+          <span class="absolute bottom-2 right-2 inline-flex items-center gap-1.5 bg-sil-blue/90 text-white text-[10px] sm:text-xs font-bold uppercase tracking-wide px-2.5 py-1.5 rounded-full opacity-90 group-hover:opacity-100 transition-opacity pointer-events-none">
+            <svg class="w-3 h-3" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M7 3H3v4M13 3h4v4M7 17H3v-4M13 17h4v-4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Enlarge
+          </span>
+        </button>
         <h3 class="font-heading font-extrabold text-lg text-stone-900 mb-2">Cultural Awareness</h3>
         <p class="text-sm text-stone-700 leading-relaxed">
           Be aware of cultural differences in gestures, eye contact, personal space, and levels of formality. The following points describe general cultural tendencies, not universal rules. Individual preferences, regional customs, and organizational culture should always be considered. When in doubt, observe first, adapt respectfully, and ask questions when appropriate.
@@ -253,9 +298,13 @@
         <!-- Card: Formal vs Informal Posture -->
         <article class="topic-card relative rounded-3xl bg-blush-card border-2 border-stone-200 shadow-sm p-5 sm:p-6" data-topic="formal-informal" data-part="part2">
           <span class="check-badge absolute -top-3 -right-3 w-9 h-9 rounded-full bg-sil-blue text-white flex items-center justify-center font-bold shadow-md" aria-hidden="true">✓</span>
-          <div class="aspect-[4/3] w-full rounded-2xl overflow-hidden bg-warm-grey mb-4">
-            <img src="images/Image_7_Formal_vs_Informal_Posture.png" alt="A diagram comparing relaxed Western posture with formal, controlled Eastern posture." class="w-full h-full object-cover" loading="lazy">
-          </div>
+          <button type="button" class="zoom-trigger group relative block w-full aspect-[16/9] rounded-2xl overflow-hidden bg-warm-grey mb-4 focus:outline-none" data-full-src="images/Image_7_Formal_vs_Informal_Posture.png" data-full-alt="A diagram comparing relaxed Western posture with formal, controlled Eastern posture." aria-label="View larger image">
+            <img src="images/Image_7_Formal_vs_Informal_Posture.png" alt="A diagram comparing relaxed Western posture with formal, controlled Eastern posture." class="w-full h-full object-contain" loading="lazy">
+            <span class="absolute bottom-2 right-2 inline-flex items-center gap-1.5 bg-sil-blue/90 text-white text-[10px] sm:text-xs font-bold uppercase tracking-wide px-2.5 py-1.5 rounded-full opacity-90 group-hover:opacity-100 transition-opacity pointer-events-none">
+              <svg class="w-3 h-3" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M7 3H3v4M13 3h4v4M7 17H3v-4M13 17h4v-4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              Enlarge
+            </span>
+          </button>
           <h3 class="font-heading font-extrabold text-lg text-stone-900 mb-1">Formal vs. Informal Posture</h3>
           <p class="text-xs font-semibold text-sil-blue-light uppercase tracking-wide mb-3">Reading the room's formality</p>
           <ul class="space-y-2 text-sm text-stone-700 leading-relaxed mb-5">
@@ -271,9 +320,13 @@
         <!-- Card: Personal Distance (cultural) -->
         <article class="topic-card relative rounded-3xl bg-blush-card border-2 border-stone-200 shadow-sm p-5 sm:p-6" data-topic="personal-distance" data-part="part2">
           <span class="check-badge absolute -top-3 -right-3 w-9 h-9 rounded-full bg-sil-blue text-white flex items-center justify-center font-bold shadow-md" aria-hidden="true">✓</span>
-          <div class="aspect-[4/3] w-full rounded-2xl overflow-hidden bg-warm-grey mb-4">
-            <img src="images/Image_8_Personal_Distance.png" alt="A diagram comparing Western preference for more space with Eastern comfort with closer proximity." class="w-full h-full object-cover" loading="lazy">
-          </div>
+          <button type="button" class="zoom-trigger group relative block w-full aspect-[16/9] rounded-2xl overflow-hidden bg-warm-grey mb-4 focus:outline-none" data-full-src="images/Image_8_Personal_Distance.png" data-full-alt="A diagram comparing Western preference for more space with Eastern comfort with closer proximity." aria-label="View larger image">
+            <img src="images/Image_8_Personal_Distance.png" alt="A diagram comparing Western preference for more space with Eastern comfort with closer proximity." class="w-full h-full object-contain" loading="lazy">
+            <span class="absolute bottom-2 right-2 inline-flex items-center gap-1.5 bg-sil-blue/90 text-white text-[10px] sm:text-xs font-bold uppercase tracking-wide px-2.5 py-1.5 rounded-full opacity-90 group-hover:opacity-100 transition-opacity pointer-events-none">
+              <svg class="w-3 h-3" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M7 3H3v4M13 3h4v4M7 17H3v-4M13 17h4v-4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              Enlarge
+            </span>
+          </button>
           <h3 class="font-heading font-extrabold text-lg text-stone-900 mb-1">Personal Distance</h3>
           <p class="text-xs font-semibold text-sil-blue-light uppercase tracking-wide mb-3">Cultural comfort zones</p>
           <ul class="space-y-2 text-sm text-stone-700 leading-relaxed mb-5">
@@ -289,9 +342,13 @@
         <!-- Card: Eye Contact -->
         <article class="topic-card relative rounded-3xl bg-blush-card border-2 border-stone-200 shadow-sm p-5 sm:p-6 md:col-span-2" data-topic="eye-contact" data-part="part2">
           <span class="check-badge absolute -top-3 -right-3 w-9 h-9 rounded-full bg-sil-blue text-white flex items-center justify-center font-bold shadow-md" aria-hidden="true">✓</span>
-          <div class="aspect-[16/9] md:aspect-[21/9] w-full rounded-2xl overflow-hidden bg-warm-grey mb-4">
-            <img src="images/Image_9_Cultural_Eye_Contact.png" alt="Two colleagues in conversation, illustrating differing cultural norms around eye contact." class="w-full h-full object-cover" loading="lazy">
-          </div>
+          <button type="button" class="zoom-trigger group relative block w-full aspect-[16/9] rounded-2xl overflow-hidden bg-warm-grey mb-4 focus:outline-none" data-full-src="images/Image_9_Cultural_Eye_Contact.png" data-full-alt="Two colleagues in conversation, illustrating differing cultural norms around eye contact." aria-label="View larger image">
+            <img src="images/Image_9_Cultural_Eye_Contact.png" alt="Two colleagues in conversation, illustrating differing cultural norms around eye contact." class="w-full h-full object-contain" loading="lazy">
+            <span class="absolute bottom-2 right-2 inline-flex items-center gap-1.5 bg-sil-blue/90 text-white text-[10px] sm:text-xs font-bold uppercase tracking-wide px-2.5 py-1.5 rounded-full opacity-90 group-hover:opacity-100 transition-opacity pointer-events-none">
+              <svg class="w-3 h-3" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M7 3H3v4M13 3h4v4M7 17H3v-4M13 17h4v-4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              Enlarge
+            </span>
+          </button>
           <h3 class="font-heading font-extrabold text-lg text-stone-900 mb-1">Eye Contact</h3>
           <p class="text-xs font-semibold text-sil-blue-light uppercase tracking-wide mb-3">Direct vs. reserved gaze</p>
           <ul class="space-y-2 text-sm text-stone-700 leading-relaxed mb-5 md:max-w-2xl">
@@ -310,9 +367,13 @@
     <!-- ============ KEY TAKEAWAYS (always visible) ============ -->
     <section class="mt-14 rounded-3xl bg-sil-blue-soft border border-sil-blue/10 p-6 sm:p-8" aria-labelledby="takeaways-heading">
       <div class="flex flex-col sm:flex-row gap-6 sm:items-center mb-6">
-        <div class="sm:w-2/5 aspect-[4/3] rounded-2xl overflow-hidden bg-warm-grey shrink-0">
-          <img src="images/Image_1a_Posture_and_Confidence.png" alt="Two colleagues shake hands warmly, representing cultural awareness in professional relationships." class="w-full h-full object-cover" loading="lazy">
-        </div>
+        <button type="button" class="zoom-trigger group relative block sm:w-2/5 aspect-[16/9] rounded-2xl overflow-hidden bg-warm-grey shrink-0 focus:outline-none" data-full-src="images/Image_1a_Posture_and_Confidence.png" data-full-alt="Two colleagues shake hands warmly, representing cultural awareness in professional relationships." aria-label="View larger image">
+          <img src="images/Image_1a_Posture_and_Confidence.png" alt="Two colleagues shake hands warmly, representing cultural awareness in professional relationships." class="w-full h-full object-contain" loading="lazy">
+          <span class="absolute bottom-2 right-2 inline-flex items-center gap-1.5 bg-sil-blue/90 text-white text-[10px] sm:text-xs font-bold uppercase tracking-wide px-2.5 py-1.5 rounded-full opacity-90 group-hover:opacity-100 transition-opacity pointer-events-none">
+            <svg class="w-3 h-3" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M7 3H3v4M13 3h4v4M7 17H3v-4M13 17h4v-4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Enlarge
+          </span>
+        </button>
         <div>
           <p class="font-heading font-extrabold text-xs uppercase tracking-[0.2em] text-sil-blue-light mb-1">Before you go</p>
           <h2 id="takeaways-heading" class="font-heading font-black text-2xl text-stone-900">Key Takeaways</h2>
@@ -332,6 +393,14 @@
   <footer class="border-t border-peach py-8 text-center px-5">
     <p class="text-sm text-stone-500">SIL Micro-Learning Module · Body Language</p>
   </footer>
+
+  <!-- Lightbox: fullscreen image viewer -->
+  <div id="lightbox" class="fixed inset-0 z-50 flex items-center justify-center bg-stone-900/95 p-4 sm:p-8" role="dialog" aria-modal="true" aria-label="Enlarged image viewer">
+    <button type="button" id="lightbox-close" class="absolute top-4 right-4 sm:top-6 sm:right-6 inline-flex items-center justify-center w-11 h-11 rounded-full bg-white/10 text-white hover:bg-white/20 focus:outline-none focus-visible:ring-2 focus-visible:ring-white transition-colors" aria-label="Close enlarged image">
+      <svg class="w-5 h-5" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M4 4l12 12M16 4L4 16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+    </button>
+    <img id="lightbox-img" src="" alt="" class="max-w-full max-h-full w-auto h-auto object-contain select-none rounded-2xl">
+  </div>
 
   <script>
   (function () {
@@ -432,6 +501,47 @@
     });
 
     updateProgress();
+  })();
+
+  (function () {
+    var lightbox = document.getElementById('lightbox');
+    var lightboxImg = document.getElementById('lightbox-img');
+    var closeBtn = document.getElementById('lightbox-close');
+    var triggers = document.querySelectorAll('.zoom-trigger');
+    var lastFocused = null;
+
+    function openLightbox(trigger) {
+      lastFocused = trigger;
+      lightboxImg.src = trigger.getAttribute('data-full-src');
+      lightboxImg.alt = trigger.getAttribute('data-full-alt') || '';
+      lightbox.classList.add('open');
+      document.body.classList.add('lightbox-locked');
+      closeBtn.focus();
+    }
+
+    function closeLightbox() {
+      lightbox.classList.remove('open');
+      document.body.classList.remove('lightbox-locked');
+      if (lastFocused) { lastFocused.focus(); }
+    }
+
+    triggers.forEach(function (trigger) {
+      trigger.addEventListener('click', function () {
+        openLightbox(this);
+      });
+    });
+
+    closeBtn.addEventListener('click', closeLightbox);
+
+    lightbox.addEventListener('click', function (e) {
+      if (e.target === lightbox) { closeLightbox(); }
+    });
+
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && lightbox.classList.contains('open')) {
+        closeLightbox();
+      }
+    });
   })();
   </script>
 
