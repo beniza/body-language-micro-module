@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Mastering Body Language — The Gallery Walk</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<!-- three.js — pinned UMD build, same version as variant-7-exhibit.html -->
+<script src="https://cdn.jsdelivr.net/npm/three@0.158.0/build/three.min.js"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          'warm-cream': '#FCFBF8',
+          'warm-beige': '#F3EFE9',
+          'warm-grey': '#E8E5E1',
+          'sil-blue': '#0D3C61',
+          'sil-blue-light': '#1A5A8F',
+          'sil-blue-deep': '#0A2E4A',
+        },
+        fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'] },
+      },
+    },
+  };
+</script>
+<style>
+  :root {
+    --panel-w: clamp(360px, 38vw, 520px);   /* desktop: docked reading panel width */
+    --sheet-h: 46vh;                          /* mobile: bottom-sheet height (dvh below) */
+    --sheet-h: 46dvh;
+  }
+  html, body { height: 100%; }
+  body {
+    margin: 0;
+    font-family: 'Inter', system-ui, sans-serif;
+    background: #E4DCCF;
+    color: #1F2933;
+    overscroll-behavior: none;
+  }
+
+  /* ---------- 3D mode: full-bleed stage, reading panel floats over it ---------- */
+  body.mode-3d { overflow: hidden; }
+  body.mode-3d #app { position: fixed; inset: 0; height: 100vh; height: 100dvh; }
+  #stage { position: absolute; inset: 0; overflow: hidden; touch-action: none; }
+  #stage canvas { display: block; width: 100%; height: 100%; }
+  #stage-vignette {
+    position: absolute; inset: 0; pointer-events: none;
+    background: radial-gradient(130% 100% at 50% 45%, rgba(0,0,0,0) 60%, rgba(10,30,50,0.22) 100%);
+  }
+
+  /* Reading panel: bottom sheet on phones, right dock at md+ */
+  body.mode-3d #panel {
+    position: absolute; left: 0; right: 0; bottom: 0;
+    height: var(--sheet-h);
+    display: flex; flex-direction: column;
+    background: rgba(252,251,248,0.93);
+    -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px);
+    border-radius: 22px 22px 0 0;
+    box-shadow: 0 -12px 40px rgba(13,60,97,0.18);
+  }
+  @media (min-width: 768px) {
+    body.mode-3d #panel {
+      top: 0; left: auto; right: 0; bottom: 0;
+      height: auto; width: var(--panel-w);
+      border-radius: 0;
+      border-left: 1px solid rgba(13,60,97,0.12);
+      box-shadow: -16px 0 50px rgba(13,60,97,0.14);
+    }
+  }
+  #panel-scroll { flex: 1; min-height: 0; overflow-y: auto; -webkit-overflow-scrolling: touch; }
+  body.mode-3d .stop { display: none; }
+  body.mode-3d .stop.is-active { display: block; }
+  body.mode-3d .stop-figure { display: none; }
+  body.mode-3d #mobile-footer { display: none; }
+
+  /* Text fades in only once the camera has settled */
+  #content { transition: opacity .45s ease, transform .45s ease; }
+  #panel.is-flying #content { opacity: 0; transform: translateY(8px); transition-duration: .2s; }
+
+  /* HUD sits over the visible part of the stage (not under the docked panel) */
+  #hud { right: 0; }
+  @media (min-width: 768px) { #hud { right: var(--panel-w); } }
+  #swipe-hint { bottom: calc(var(--sheet-h) + 12px); }
+
+  /* ---------- Fallback (no WebGL / file://): stacked, fully readable ---------- */
+  body.mode-flat #stage, body.mode-flat #hud, body.mode-flat #controls, body.mode-flat #swipe-hint { display: none; }
+  body.mode-flat .stop { display: block; }
+  body.mode-flat .flat-hide { display: none; }
+  body.mode-flat .stop + .stop { border-top: 1px solid rgba(13,60,97,0.12); }
+  body.mode-flat { background: #FCFBF8; }
+
+  /* ---------- Controls ---------- */
+  .dot { width: 6px; height: 6px; border-radius: 999px; background: #0D3C61; opacity: 0.28; transition: opacity .25s ease, width .25s ease; }
+  .dot.active { opacity: 1; width: 18px; }
+  .nav-btn { transition: transform .15s ease, background-color .2s ease, opacity .2s ease; }
+  .nav-btn:active { transform: scale(0.94); }
+  .nav-btn[disabled] { opacity: 0.3; pointer-events: none; }
+  :focus-visible { outline: 3px solid #1A5A8F; outline-offset: 2px; }
+
+  .sr-only-live { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+
+  #loader { transition: opacity .5s ease; }
+  #loader.done { opacity: 0; pointer-events: none; }
+  #kbd-hint.revealed { display: flex; }
+
+  @media (prefers-reduced-motion: reduce) {
+    #content, .dot, .nav-btn, #swipe-hint, #loader { transition: none; }
+    #panel.is-flying #content { opacity: 1; transform: none; }
+  }
+  ::selection { background: #0D3C61; color: #FCFBF8; }
+</style>
+</head>
+<body class="antialiased">
+
+<div id="app">
+
+  <!-- ================= 3D STAGE (decorative; all text lives in the panel) ================= -->
+  <div id="stage" aria-hidden="true">
+    <div id="stage-vignette"></div>
+
+    <div id="loader" class="absolute inset-0 flex flex-col items-center justify-center text-sil-blue" style="background:#E4DCCF;">
+      <svg class="w-8 h-8 animate-spin mb-3" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-opacity="0.2" stroke-width="3"/><path d="M21 12a9 9 0 0 0-9-9" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg>
+      <p class="text-xs font-semibold tracking-widest uppercase">Opening the gallery</p>
+    </div>
+
+    <!-- HUD: counter + chapter, keyboard legend -->
+    <div id="hud" class="absolute top-0 left-0 flex flex-wrap items-start justify-between gap-2 px-4 sm:px-6 pt-4 sm:pt-5 pointer-events-none" style="padding-top: max(1rem, env(safe-area-inset-top, 0px));">
+      <div class="flex items-center gap-2 whitespace-nowrap shrink-0 bg-white/75 backdrop-blur rounded-full px-3 py-1.5 border border-white shadow-sm">
+        <span id="counter" class="text-xs font-bold text-sil-blue tracking-wide">01 / 10</span>
+        <span class="w-px h-3 bg-sil-blue/30" aria-hidden="true"></span>
+        <span id="chapter" class="text-xs font-semibold text-sil-blue-light">Welcome</span>
+      </div>
+      <div id="kbd-hint" class="hidden md:flex items-center gap-1.5 bg-white/75 backdrop-blur rounded-full px-3 py-1.5 border border-white text-[11px] font-medium text-sil-blue shadow-sm">
+        <kbd class="px-1.5 py-0.5 rounded border border-sil-blue/40 font-sans">&larr;</kbd>
+        <kbd class="px-1.5 py-0.5 rounded border border-sil-blue/40 font-sans">&rarr;</kbd>
+        <span>walk</span>
+        <span class="mx-1 opacity-40">·</span>
+        <kbd class="px-1.5 py-0.5 rounded border border-sil-blue/40 font-sans">Home</kbd>
+        <kbd class="px-1.5 py-0.5 rounded border border-sil-blue/40 font-sans">End</kbd>
+      </div>
+    </div>
+
+    <p id="swipe-hint" class="md:hidden absolute left-1/2 -translate-x-1/2 text-[11px] font-semibold tracking-wide text-sil-blue bg-white/75 backdrop-blur rounded-full px-3 py-1 pointer-events-none transition-opacity duration-500 shadow-sm whitespace-nowrap">
+      Swipe to walk to the next piece &rarr;
+    </p>
+  </div>
+
+  <!-- ================= READING PANEL (real DOM: selectable, reflowable, AT-navigable) ================= -->
+  <aside id="panel" aria-label="Lesson text">
+    <div aria-live="polite" class="sr-only-live" id="live-region"></div>
+
+    <div id="panel-scroll">
+      <main id="content" class="px-5 sm:px-8 md:px-10 pt-5 pb-6 md:pt-14 max-w-2xl md:max-w-none mx-auto w-full">
+
+        <header id="flat-header" class="mb-8 hidden">
+          <p class="text-xs font-bold tracking-[0.2em] uppercase text-sil-blue-light mb-2">SIL Micro-Learning Module</p>
+          <h1 class="text-3xl sm:text-4xl font-extrabold text-sil-blue leading-tight">Mastering Body Language</h1>
+          <p class="mt-3 text-sm text-gray-600">3D view unavailable on this device &mdash; showing the full module as a readable page.</p>
+        </header>
+
+        <!-- 0 · WELCOME (overview shot: the whole gallery from the entrance) -->
+        <section class="stop is-active py-2 md:py-0" data-index="0" data-title="Welcome" data-chapter="Welcome">
+          <figure class="stop-figure mb-5"><img src="images/Image_1_Posture_and_Confidence.png" alt="A professional sits confidently at her desk in a warm, welcoming office." class="w-full h-auto rounded-2xl border border-sil-blue/10" loading="eager"></figure>
+          <p class="text-xs font-bold tracking-[0.2em] uppercase text-sil-blue-light mb-2">SIL Micro-Learning Module</p>
+          <h1 class="text-2xl sm:text-4xl lg:text-5xl font-extrabold text-sil-blue leading-tight mb-3">Mastering Body Language</h1>
+          <p class="text-sm sm:text-lg text-gray-700 leading-relaxed mb-4">A self-paced micro-module on posture, presence, and cross-cultural awareness in professional communication.</p>
+          <p class="text-sm sm:text-base text-gray-700 leading-relaxed border-l-4 border-sil-blue pl-4">Effective communicators adapt their body language to build understanding. Awareness of cultural differences in body language demonstrates respect, strengthens relationships, and helps prevent unintended misunderstandings.</p>
+          <p class="mt-4 text-xs font-semibold text-sil-blue-light flat-hide">Walk the gallery &middot; 10 stops &middot; about 4 minutes</p>
+        </section>
+
+        <!-- 1 · PHYSICAL POSTURE -->
+        <section class="stop py-2 md:py-0" data-index="1" data-title="Physical Posture" data-chapter="Part I · Fundamentals">
+          <figure class="stop-figure mb-5"><img src="images/Image_2a_Gestures_and_Meaning.png" alt="A professional faces a colleague with an open, upright posture; callouts read face the speaker, maintain open posture, avoid crossed arms." class="w-full h-auto rounded-2xl border border-sil-blue/10" loading="lazy"></figure>
+          <p class="text-xs font-bold tracking-[0.2em] uppercase text-sil-blue-light mb-2">Stop 01 &middot; How you carry your body</p>
+          <h2 class="text-xl sm:text-3xl lg:text-4xl font-extrabold text-sil-blue mb-3">Physical Posture</h2>
+          <ul class="space-y-2.5 text-sm sm:text-base text-gray-700 leading-relaxed">
+            <li class="flex gap-3"><span class="text-sil-blue-light font-bold shrink-0">&rarr;</span><span>Face the speaker and give them your full attention.</span></li>
+            <li class="flex gap-3"><span class="text-sil-blue-light font-bold shrink-0">&rarr;</span><span>Stand or sit with an open, upright posture to project confidence.</span></li>
+            <li class="flex gap-3"><span class="text-sil-blue-light font-bold shrink-0">&rarr;</span><span>Avoid closed-off behaviors such as crossed arms, slouching, or looking down.</span></li>
+            <li class="flex gap-3"><span class="text-sil-blue-light font-bold shrink-0">&rarr;</span><span>Invite participation through an open posture and welcoming orientation toward others.</span></li>
+          </ul>
+        </section>
+
+        <!-- 2 · PHYSICAL DISTANCE -->
+        <section class="stop py-2 md:py-0" data-index="2" data-title="Physical Distance" data-chapter="Part I · Fundamentals">
+          <figure class="stop-figure mb-5"><img src="images/Image_3_Responsive_Communication.png" alt="Two colleagues talk at a desk; callouts read respect personal space, lean forward to listen, adapt to others' comfort." class="w-full h-auto rounded-2xl border border-sil-blue/10" loading="lazy"></figure>
+          <p class="text-xs font-bold tracking-[0.2em] uppercase text-sil-blue-light mb-2">Stop 02 &middot; How you position yourself in relation to others</p>
+          <h2 class="text-xl sm:text-3xl lg:text-4xl font-extrabold text-sil-blue mb-3">Physical Distance</h2>
+          <ul class="space-y-2.5 text-sm sm:text-base text-gray-700 leading-relaxed">
+            <li class="flex gap-3"><span class="text-sil-blue-light font-bold shrink-0">&rarr;</span><span>Respect personal space while remaining approachable.</span></li>
+            <li class="flex gap-3"><span class="text-sil-blue-light font-bold shrink-0">&rarr;</span><span>Lean slightly forward to signal interest and engagement while listening.</span></li>
+            <li class="flex gap-3"><span class="text-sil-blue-light font-bold shrink-0">&rarr;</span><span>Adapt your position and proximity to help others feel comfortable and included.</span></li>
+          </ul>
+        </section>
+
+        <!-- 3 · FACIAL EXPRESSION -->
+        <section class="stop py-2 md:py-0" data-index="3" data-title="Facial Expression" data-chapter="Part I · Fundamentals">
+          <figure class="stop-figure mb-5"><img src="images/Image_4_Facial_Expression.png" alt="A smiling professional; callouts read maintain eye contact, nod to show understanding, smile to welcome others, match the emotional tone." class="w-full h-auto rounded-2xl border border-sil-blue/10" loading="lazy"></figure>
+          <p class="text-xs font-bold tracking-[0.2em] uppercase text-sil-blue-light mb-2">Stop 03 &middot; What your face communicates</p>
+          <h2 class="text-xl sm:text-3xl lg:text-4xl font-extrabold text-sil-blue mb-3">Facial Expression</h2>
+          <ul class="space-y-2.5 text-sm sm:text-base text-gray-700 leading-relaxed">
+            <li class="flex gap-3"><span class="text-sil-blue-light font-bold shrink-0">&rarr;</span><span>Maintain appropriate eye contact to communicate honesty and attentiveness.</span></li>
+            <li class="flex gap-3"><span class="text-sil-blue-light font-bold shrink-0">&rarr;</span><span>Nod occasionally and use appropriate facial expressions to show understanding.</span></li>
+            <li class="flex gap-3"><span class="text-sil-blue-light font-bold shrink-0">&rarr;</span><span>Smile genuinely when appropriate to create a welcoming atmosphere.</span></li>
+            <li class="flex gap-3"><span class="text-sil-blue-light font-bold shrink-0">&rarr;</span><span>Match your facial expressions to the emotional tone of the conversation.</span></li>
+          </ul>
+        </section>
+
+        <!-- 4 · DEMEANOR -->
+        <section class="stop py-2 md:py-0" data-index="4" data-title="Demeanor" data-chapter="Part I · Fundamentals">
+          <figure class="stop-figure mb-5"><img src="images/Image_5_Demeanor.png" alt="A composed professional gestures naturally; callouts read match tone with body, avoid distracted behaviors, stay calm under pressure, use natural hand gestures." class="w-full h-auto rounded-2xl border border-sil-blue/10" loading="lazy"></figure>
+          <p class="text-xs font-bold tracking-[0.2em] uppercase text-sil-blue-light mb-2">Stop 04 &middot; The attitude and emotional tone you project</p>
+          <h2 class="text-xl sm:text-3xl lg:text-4xl font-extrabold text-sil-blue mb-3">Demeanor</h2>
+          <ul class="space-y-2.5 text-sm sm:text-base text-gray-700 leading-relaxed">
+            <li class="flex gap-3"><span class="text-sil-blue-light font-bold shrink-0">&rarr;</span><span>Ensure your body language matches the tone of the words you are saying.</span></li>
+            <li class="flex gap-3"><span class="text-sil-blue-light font-bold shrink-0">&rarr;</span><span>Show respect by avoiding behaviors that suggest impatience or distraction.</span></li>
+            <li class="flex gap-3"><span class="text-sil-blue-light font-bold shrink-0">&rarr;</span><span>Maintain a calm, steady presence, especially during difficult conversations.</span></li>
+            <li class="flex gap-3"><span class="text-sil-blue-light font-bold shrink-0">&rarr;</span><span>Use natural, purposeful hand gestures to reinforce important ideas.</span></li>
+          </ul>
+        </section>
+
+        <!-- 5 · CULTURAL AWARENESS -->
+        <section class="stop py-2 md:py-0" data-index="5" data-title="Cultural Awareness" data-chapter="Part II · Cultural Awareness">
+          <figure class="stop-figure mb-5"><img src="images/Image_6_Cultural_Differences.png" alt="A professional stands amid a global network of colleagues; callouts read recognize cultural differences, avoid assuming universal rules, observe, adapt and ask." class="w-full h-auto rounded-2xl border border-sil-blue/10" loading="lazy"></figure>
+          <p class="text-xs font-bold tracking-[0.2em] uppercase text-sil-blue-light mb-2">Stop 05 &middot; Reading the room, across cultures</p>
+          <h2 class="text-xl sm:text-3xl lg:text-4xl font-extrabold text-sil-blue mb-3">Cultural Awareness</h2>
+          <p class="text-sm sm:text-base text-gray-700 leading-relaxed">Be aware of cultural differences in gestures, eye contact, personal space, and levels of formality. The following points describe general cultural tendencies, not universal rules. Individual preferences, regional customs, and organizational culture should always be considered. When in doubt, observe first, adapt respectfully, and ask questions when appropriate.</p>
+        </section>
+
+        <!-- 6 · FORMAL VS INFORMAL POSTURE -->
+        <section class="stop py-2 md:py-0" data-index="6" data-title="Formal vs. Informal Posture" data-chapter="Part II · Cultural Awareness">
+          <figure class="stop-figure mb-5"><img src="images/Image_7_Formal_vs_Informal_Posture.png" alt="A professional between a relaxed Western posture icon and a formal Eastern posture icon; captions read West: relaxed but attentive, East: formal and controlled, start formal then adjust." class="w-full h-auto rounded-2xl border border-sil-blue/10" loading="lazy"></figure>
+          <p class="text-xs font-bold tracking-[0.2em] uppercase text-sil-blue-light mb-2">Stop 06 &middot; Formality across cultures</p>
+          <h2 class="text-xl sm:text-3xl lg:text-4xl font-extrabold text-sil-blue mb-3">Formal vs. Informal Posture</h2>
+          <ul class="space-y-2.5 text-sm sm:text-base text-gray-700 leading-relaxed">
+            <li class="flex gap-3"><span class="text-sil-blue-light font-bold shrink-0">&rarr;</span><span>Western workplaces often encourage relaxed but attentive posture and expressive gestures.</span></li>
+            <li class="flex gap-3"><span class="text-sil-blue-light font-bold shrink-0">&rarr;</span><span>Many Eastern cultures place greater emphasis on formal posture, controlled movements, and showing respect through physical demeanor.</span></li>
+            <li class="flex gap-3"><span class="text-sil-blue-light font-bold shrink-0">&rarr;</span><span>When in doubt, begin with a more formal posture and adjust as you observe the communication style of those around you.</span></li>
+          </ul>
+        </section>
+
+        <!-- 7 · PERSONAL DISTANCE -->
+        <section class="stop py-2 md:py-0" data-index="7" data-title="Personal Distance" data-chapter="Part II · Cultural Awareness">
+          <figure class="stop-figure mb-5"><img src="images/Image_8_Personal_Distance.png" alt="A professional beside a comparison of spacing conventions; captions read West: prefers more space, East: closer proximity common, observe and adapt distance." class="w-full h-auto rounded-2xl border border-sil-blue/10" loading="lazy"></figure>
+          <p class="text-xs font-bold tracking-[0.2em] uppercase text-sil-blue-light mb-2">Stop 07 &middot; How close is comfortable</p>
+          <h2 class="text-xl sm:text-3xl lg:text-4xl font-extrabold text-sil-blue mb-3">Personal Distance</h2>
+          <ul class="space-y-2.5 text-sm sm:text-base text-gray-700 leading-relaxed">
+            <li class="flex gap-3"><span class="text-sil-blue-light font-bold shrink-0">&rarr;</span><span>Many Western cultures (North America, Northern Europe) generally prefer more personal space during conversation.</span></li>
+            <li class="flex gap-3"><span class="text-sil-blue-light font-bold shrink-0">&rarr;</span><span>Many Eastern cultures are often more comfortable standing closer to people they know well, though preferences vary widely by country and context.</span></li>
+            <li class="flex gap-3"><span class="text-sil-blue-light font-bold shrink-0">&rarr;</span><span>Observe and adapt to the other person&rsquo;s comfort level rather than assuming your own preference is universal.</span></li>
+          </ul>
+        </section>
+
+        <!-- 8 · EYE CONTACT -->
+        <section class="stop py-2 md:py-0" data-index="8" data-title="Eye Contact" data-chapter="Part II · Cultural Awareness">
+          <figure class="stop-figure mb-5"><img src="images/Image_9_Cultural_Eye_Contact.png" alt="Two colleagues in conversation; captions contrast direct Western eye contact with Eastern norms where prolonged contact may be seen as disrespectful." class="w-full h-auto rounded-2xl border border-sil-blue/10" loading="lazy"></figure>
+          <p class="text-xs font-bold tracking-[0.2em] uppercase text-sil-blue-light mb-2">Stop 08 &middot; What a gaze signals</p>
+          <h2 class="text-xl sm:text-3xl lg:text-4xl font-extrabold text-sil-blue mb-3">Eye Contact</h2>
+          <ul class="space-y-2.5 text-sm sm:text-base text-gray-700 leading-relaxed">
+            <li class="flex gap-3"><span class="text-sil-blue-light font-bold shrink-0">&rarr;</span><span>Many Western cultures view direct eye contact as a sign of confidence, honesty, and engagement.</span></li>
+            <li class="flex gap-3"><span class="text-sil-blue-light font-bold shrink-0">&rarr;</span><span>In some Eastern cultures, prolonged eye contact &mdash; particularly with elders or authority figures &mdash; may be viewed as disrespectful or confrontational.</span></li>
+            <li class="flex gap-3"><span class="text-sil-blue-light font-bold shrink-0">&rarr;</span><span>Aim for comfortable, respectful eye contact while remaining sensitive to cultural expectations.</span></li>
+          </ul>
+        </section>
+
+        <!-- 9 · KEY TAKEAWAYS (overview shot: looking back down the gallery you walked) -->
+        <section class="stop py-2 md:py-0" data-index="9" data-title="Key Takeaways" data-chapter="Before You Go">
+          <figure class="stop-figure mb-5"><img src="images/Image_1a_Posture_and_Confidence.png" alt="Two colleagues shake hands warmly, representing cultural awareness in professional relationships." class="w-full h-auto rounded-2xl border border-sil-blue/10" loading="lazy"></figure>
+          <p class="text-xs font-bold tracking-[0.2em] uppercase text-sil-blue-light mb-2">Before you go &middot; Look back at the path you walked</p>
+          <h2 class="text-xl sm:text-3xl lg:text-4xl font-extrabold text-sil-blue mb-3">Key Takeaways</h2>
+          <ul class="space-y-2.5 text-sm sm:text-base text-gray-700 leading-relaxed">
+            <li class="flex gap-3"><span class="shrink-0 w-6 h-6 rounded-full bg-sil-blue text-white text-xs font-bold flex items-center justify-center mt-0.5">1</span><span>Open, upright posture and full attention toward the speaker project confidence and invite participation.</span></li>
+            <li class="flex gap-3"><span class="shrink-0 w-6 h-6 rounded-full bg-sil-blue text-white text-xs font-bold flex items-center justify-center mt-0.5">2</span><span>Distance, eye contact, and a genuine smile all signal engagement &mdash; calibrate each to the moment and the person.</span></li>
+            <li class="flex gap-3"><span class="shrink-0 w-6 h-6 rounded-full bg-sil-blue text-white text-xs font-bold flex items-center justify-center mt-0.5">3</span><span>A calm, steady demeanor that matches your words builds trust, especially under pressure.</span></li>
+            <li class="flex gap-3"><span class="shrink-0 w-6 h-6 rounded-full bg-sil-blue text-white text-xs font-bold flex items-center justify-center mt-0.5">4</span><span>Formality, personal space, and eye contact norms vary by culture &mdash; these are tendencies, not rules.</span></li>
+            <li class="flex gap-3"><span class="shrink-0 w-6 h-6 rounded-full bg-sil-blue text-white text-xs font-bold flex items-center justify-center mt-0.5">5</span><span>When uncertain, observe first, adapt respectfully, and ask questions when appropriate.</span></li>
+          </ul>
+          <button type="button" id="restart-btn" class="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-sil-blue border border-sil-blue/40 rounded-full px-5 py-2.5 hover:bg-sil-blue hover:text-white transition-colors">
+            <svg class="w-4 h-4" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M10 4a6 6 0 105.66 4H14" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 4v4h-4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Walk it again
+          </button>
+          <p class="mt-6 text-xs text-gray-500">SIL Micro-Learning Module &middot; Body Language</p>
+        </section>
+
+        <footer class="mt-10 pt-6 border-t border-sil-blue/10" id="mobile-footer">
+          <p class="text-xs text-gray-500">SIL Micro-Learning Module &middot; Body Language</p>
+        </footer>
+      </main>
+    </div>
+
+    <!-- Controls -->
+    <div id="controls" class="shrink-0 border-t border-sil-blue/10 px-5 sm:px-8 md:px-10 pt-3 pb-3 bg-warm-cream/70" style="padding-bottom: max(0.75rem, env(safe-area-inset-bottom, 0px));">
+      <div class="flex items-center justify-between gap-3 max-w-2xl md:max-w-none mx-auto">
+        <button type="button" id="prev-btn" aria-label="Previous stop" class="nav-btn inline-flex items-center justify-center w-12 h-12 rounded-full border border-sil-blue/30 bg-white text-sil-blue hover:bg-sil-blue hover:text-white">
+          <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M15 5l-7 7 7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <nav aria-label="Gallery stops" id="dots" class="flex items-center gap-1.5 px-2"></nav>
+        <button type="button" id="next-btn" aria-label="Next stop" class="nav-btn inline-flex items-center justify-center w-12 h-12 rounded-full bg-sil-blue text-white hover:bg-sil-blue-light shadow-md shadow-sil-blue/20">
+          <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M9 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      </div>
+      <p class="text-center text-[11px] text-gray-500 mt-2">SIL Micro-Learning Module &middot; Body Language</p>
+    </div>
+  </aside>
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  var stops = Array.prototype.slice.call(document.querySelectorAll('.stop'));
+  var total = stops.length; // 10: welcome overview + 8 topic pieces + takeaways overview
+  var current = 0;
+  var body = document.body;
+
+  var counterEl = document.getElementById('counter');
+  var chapterEl = document.getElementById('chapter');
+  var liveRegion = document.getElementById('live-region');
+  var prevBtn = document.getElementById('prev-btn');
+  var nextBtn = document.getElementById('next-btn');
+  var dotsWrap = document.getElementById('dots');
+  var panel = document.getElementById('panel');
+  var panelScroll = document.getElementById('panel-scroll');
+  var swipeHint = document.getElementById('swipe-hint');
+  var kbdHint = document.getElementById('kbd-hint');
+
+  var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ---------------- WebGL detection ---------------- */
+  function hasWebGL() {
+    try {
+      var c = document.createElement('canvas');
+      return !!(window.WebGLRenderingContext && (c.getContext('webgl') || c.getContext('experimental-webgl')));
+    } catch (e) { return false; }
+  }
+
+  var scene3d = null;
+
+  if (!hasWebGL() || typeof THREE === 'undefined') {
+    enterFlatMode();
+  } else {
+    body.classList.add('mode-3d');
+    try {
+      scene3d = createScene();
+    } catch (e) {
+      console.warn('3D scene failed to initialise, falling back to flat layout.', e);
+      body.classList.remove('mode-3d');
+      enterFlatMode();
+    }
+  }
+
+  var degraded = false;
+  function degrade(reason) {
+    if (degraded) return;
+    degraded = true;
+    console.warn('Gallery Walk: degrading to flat layout — ' + reason);
+    if (scene3d && scene3d.dispose) scene3d.dispose();
+    scene3d = null;
+    body.classList.remove('mode-3d');
+    panel.classList.remove('is-flying');
+    enterFlatMode(reason);
+  }
+
+  function enterFlatMode(reason) {
+    body.classList.add('mode-flat');
+    var header = document.getElementById('flat-header');
+    header.classList.remove('hidden');
+    if (reason) header.querySelector('p:last-child').textContent = reason;
+    stops.forEach(function (s) { s.classList.add('is-active'); });
+    // Page already has a header h1 in flat mode: demote the welcome stop's h1.
+    var welcomeH1 = stops[0].querySelector('h1');
+    if (welcomeH1) {
+      var h2 = document.createElement('h2');
+      h2.className = welcomeH1.className;
+      h2.textContent = 'Welcome';
+      welcomeH1.parentNode.replaceChild(h2, welcomeH1);
+    }
+  }
+
+  /* ---------------- Shared navigation UI ---------------- */
+  function pad(n) { return n < 10 ? '0' + n : '' + n; }
+
+  stops.forEach(function (s, i) {
+    var b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'p-1.5';
+    b.setAttribute('aria-label', 'Stop ' + (i + 1) + ': ' + s.dataset.title);
+    var d = document.createElement('span');
+    d.className = 'dot block';
+    b.appendChild(d);
+    b.addEventListener('click', function () { goTo(i); });
+    dotsWrap.appendChild(b);
+  });
+  var dots = Array.prototype.slice.call(dotsWrap.querySelectorAll('.dot'));
+
+  function goTo(i, opts) {
+    i = Math.max(0, Math.min(total - 1, i));
+    if (i === current && !(opts && opts.force)) return;
+    current = i;
+    stops.forEach(function (s, idx) { s.classList.toggle('is-active', idx === current); });
+    dots.forEach(function (d, idx) { d.classList.toggle('active', idx === current); });
+    counterEl.textContent = pad(current + 1) + ' / ' + pad(total);
+    chapterEl.textContent = stops[current].dataset.chapter;
+    prevBtn.disabled = current === 0;
+    nextBtn.disabled = current === total - 1;
+    liveRegion.textContent = 'Stop ' + (current + 1) + ' of ' + total + ': ' + stops[current].dataset.title;
+    panelScroll.scrollTop = 0;
+    if (swipeHint && current > 0) swipeHint.style.opacity = '0';
+    if (scene3d) {
+      // Text fades in once the camera has settled at the new stop (instant under reduced motion)
+      if (!reduceMotion) panel.classList.add('is-flying');
+      scene3d.flyTo(current, function () { panel.classList.remove('is-flying'); });
+    }
+  }
+
+  prevBtn.addEventListener('click', function () { goTo(current - 1); });
+  nextBtn.addEventListener('click', function () { goTo(current + 1); });
+  document.getElementById('restart-btn').addEventListener('click', function () { goTo(0); });
+
+  // Keyboard: same pattern as variants 6 and 7 (plus ↑/↓). The legend reveals itself on first keypress.
+  document.addEventListener('keydown', function (e) {
+    if (body.classList.contains('mode-flat')) return;
+    if (e.altKey || e.ctrlKey || e.metaKey) return;
+    var handled = true;
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === 'PageDown') goTo(current + 1);
+    else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp' || e.key === 'PageUp') goTo(current - 1);
+    else if (e.key === 'Home') goTo(0);
+    else if (e.key === 'End') goTo(total - 1);
+    else handled = false;
+    if (handled) { e.preventDefault(); kbdHint.classList.add('revealed'); }
+  });
+
+  goTo(0, { force: true });
+
+  /* =====================================================================
+     three.js scene — a long picture gallery the camera physically walks through
+     ===================================================================== */
+  function createScene() {
+    var stage = document.getElementById('stage');
+    var loader = document.getElementById('loader');
+    var mdQuery = window.matchMedia('(min-width: 768px)');
+
+    var dpr = Math.min(window.devicePixelRatio || 1, 2);
+    var renderer = new THREE.WebGLRenderer({ antialias: dpr < 2, alpha: false, powerPreference: 'low-power' });
+    renderer.setPixelRatio(dpr);
+    stage.appendChild(renderer.domElement);
+
+    // ---- Hall dimensions (world units; 1 ≈ 1 m) ----
+    var HALF_W = 3.2, FLOOR_Y = -1.5, CEIL_Y = 2.4, LENGTH = 19;   // hall spans z = 0 (entrance) … -LENGTH (end wall)
+    var EYE_Y = 0.15;                                                // frame centre height
+    var WALL_COLOR = 0xE4DCCF, FOG_COLOR = 0xD6CCBD;
+    var FOV_MAX = 82;
+
+    var scene = new THREE.Scene();
+    scene.fog = new THREE.Fog(FOG_COLOR, 9, 42);
+    renderer.setClearColor(FOG_COLOR, 1);
+
+    var camera = new THREE.PerspectiveCamera(55, 1, 0.08, 80);
+    var camTarget = new THREE.Vector3(0, EYE_Y, -LENGTH);
+
+    /* ---------- Architecture (all MeshBasicMaterial: no lights, no shadows) ---------- */
+    var floorTex = makePlankTexture();
+    floorTex.wrapS = floorTex.wrapT = THREE.RepeatWrapping;
+    floorTex.repeat.set(2, 6);
+    floorTex.anisotropy = Math.min(4, renderer.capabilities.getMaxAnisotropy());
+    var floor = new THREE.Mesh(new THREE.PlaneGeometry(HALF_W * 2, LENGTH), new THREE.MeshBasicMaterial({ map: floorTex }));
+    floor.rotation.x = -Math.PI / 2; floor.position.set(0, FLOOR_Y, -LENGTH / 2);
+    scene.add(floor);
+
+    var ceil = new THREE.Mesh(new THREE.PlaneGeometry(HALF_W * 2, LENGTH), new THREE.MeshBasicMaterial({ color: 0xEDE7DC }));
+    ceil.rotation.x = Math.PI / 2; ceil.position.set(0, CEIL_Y, -LENGTH / 2);
+    scene.add(ceil);
+
+    var wallMat = new THREE.MeshBasicMaterial({ color: WALL_COLOR });
+    var wallH = CEIL_Y - FLOOR_Y, wallMidY = (CEIL_Y + FLOOR_Y) / 2;
+    var wallL = new THREE.Mesh(new THREE.PlaneGeometry(LENGTH, wallH), wallMat);
+    wallL.rotation.y = Math.PI / 2; wallL.position.set(-HALF_W, wallMidY, -LENGTH / 2); scene.add(wallL);
+    var wallR = new THREE.Mesh(new THREE.PlaneGeometry(LENGTH, wallH), wallMat);
+    wallR.rotation.y = -Math.PI / 2; wallR.position.set(HALF_W, wallMidY, -LENGTH / 2); scene.add(wallR);
+    var wallEnd = new THREE.Mesh(new THREE.PlaneGeometry(HALF_W * 2, wallH), new THREE.MeshBasicMaterial({ color: 0x0D3C61 })); // feature wall in SIL blue
+    wallEnd.position.set(0, wallMidY, -LENGTH); scene.add(wallEnd);
+    var wallFront = new THREE.Mesh(new THREE.PlaneGeometry(HALF_W * 2, wallH), new THREE.MeshBasicMaterial({ color: 0x0D3C61 }));
+    wallFront.rotation.y = Math.PI; wallFront.position.set(0, wallMidY, 0); scene.add(wallFront);
+
+    // Baseboards + a slim cornice give the walls a readable edge
+    var trimMat = new THREE.MeshBasicMaterial({ color: 0xF7F3EC });
+    [-1, 1].forEach(function (side) {
+      var base = new THREE.Mesh(new THREE.BoxGeometry(0.06, 0.16, LENGTH), trimMat);
+      base.position.set(side * (HALF_W - 0.03), FLOOR_Y + 0.08, -LENGTH / 2); scene.add(base);
+      var cornice = new THREE.Mesh(new THREE.BoxGeometry(0.08, 0.10, LENGTH), trimMat);
+      cornice.position.set(side * (HALF_W - 0.04), CEIL_Y - 0.05, -LENGTH / 2); scene.add(cornice);
+    });
+    // Ceiling light track down the middle
+    var track = new THREE.Mesh(new THREE.BoxGeometry(0.10, 0.06, LENGTH - 1), new THREE.MeshBasicMaterial({ color: 0x2B2B2B }));
+    track.position.set(0, CEIL_Y - 0.03, -LENGTH / 2); scene.add(track);
+
+    // A single bench mid-hall for scale
+    var benchMat = new THREE.MeshBasicMaterial({ color: 0x4A3B2E });
+    var bench = new THREE.Mesh(new THREE.BoxGeometry(1.7, 0.08, 0.5), benchMat);
+    bench.position.set(0, FLOOR_Y + 0.46, -9.6); scene.add(bench);
+    [-0.7, 0.7].forEach(function (x) {
+      var leg = new THREE.Mesh(new THREE.BoxGeometry(0.08, 0.42, 0.42), benchMat);
+      leg.position.set(x, FLOOR_Y + 0.21, -9.6); scene.add(leg);
+    });
+
+    /* ---------- Frames ---------- */
+    var washTex = makeRadialTexture('rgba(255,250,240,0.95)', 'rgba(255,250,240,0)');
+    var poolTex = makeRadialTexture('rgba(255,236,205,0.55)', 'rgba(255,236,205,0)');
+    var frameMats = [0x0A2E4A, 0x0A2E4A, 0x1A5A8F, 0x082238, 0x0D3C61, 0x0A2E4A].map(function (c) { return new THREE.MeshBasicMaterial({ color: c }); });
+    var matteMat = new THREE.MeshBasicMaterial({ color: 0xFCFBF8 });
+
+    // Placement: 0 = cover on the far end wall; 1..8 alternate left/right along the hall; 9 = closing piece over the entrance
+    var frames = [];
+    var ASPECT_GUESS = 1.8;
+    function placement(i) {
+      if (i === 0) return { pos: new THREE.Vector3(0, EYE_Y + 0.25, -LENGTH + 0.01), normal: new THREE.Vector3(0, 0, 1), W: 4.2, wall: 'end' };
+      if (i === total - 1) return { pos: new THREE.Vector3(0, EYE_Y + 0.35, -0.01), normal: new THREE.Vector3(0, 0, -1), W: 3.4, wall: 'front' };
+      var side = (i % 2 === 1) ? -1 : 1;            // odd stops on the left wall, even on the right
+      var z = -2.6 - (i - 1) * 2.0;
+      return { pos: new THREE.Vector3(side * (HALF_W - 0.01), EYE_Y, z), normal: new THREE.Vector3(-side, 0, 0), W: 2.4, side: side };
+    }
+
+    stops.forEach(function (s, i) {
+      var img = s.querySelector('.stop-figure img');
+      var pl = placement(i);
+      var W = pl.W, H = W / ASPECT_GUESS;
+      var g = new THREE.Group();
+      g.position.copy(pl.pos);
+      g.lookAt(pl.pos.clone().add(pl.normal));
+      scene.add(g);
+
+      var box = new THREE.Mesh(new THREE.BoxGeometry(W + 0.22, H + 0.22, 0.07), frameMats);
+      box.position.z = 0.035;
+      var matte = new THREE.Mesh(new THREE.PlaneGeometry(W + 0.10, H + 0.10), matteMat);
+      matte.position.z = 0.072;
+      var pic = new THREE.Mesh(new THREE.PlaneGeometry(W, H), new THREE.MeshBasicMaterial({ color: 0xD8D2C8 }));
+      pic.position.z = 0.076;
+
+      // Spotlight wash on the wall above/around the piece (additive so it reads as light)
+      var wash = new THREE.Mesh(new THREE.PlaneGeometry(W * 2.0, H * 2.8),
+        new THREE.MeshBasicMaterial({ map: washTex, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, opacity: 0.30 }));
+      wash.position.set(0, H * 0.35, 0.004);
+      g.add(wash, box, matte, pic);
+
+      // Warm light pool on the floor in front of the piece
+      var pool = null;
+      if (pl.side) {
+        pool = new THREE.Mesh(new THREE.PlaneGeometry(W * 1.5, 1.7), new THREE.MeshBasicMaterial({ map: poolTex, transparent: true, depthWrite: false }));
+        pool.rotation.x = -Math.PI / 2;
+        pool.position.set(pl.side * (HALF_W - 0.9), FLOOR_Y + 0.004, pl.pos.z);
+        scene.add(pool);
+        // Track-light head aimed at this piece
+        var head = new THREE.Mesh(new THREE.BoxGeometry(0.16, 0.12, 0.16), new THREE.MeshBasicMaterial({ color: 0x2B2B2B }));
+        head.position.set(pl.side * 0.6, CEIL_Y - 0.12, pl.pos.z); scene.add(head);
+        var lamp = new THREE.Mesh(new THREE.CircleGeometry(0.06, 12), new THREE.MeshBasicMaterial({ color: 0xFFF6E0 }));
+        lamp.rotation.x = Math.PI / 2; lamp.position.set(pl.side * 0.6, CEIL_Y - 0.185, pl.pos.z); scene.add(lamp);
+      }
+
+      frames.push({ group: g, pic: pic, matte: matte, box: box, wash: wash, W: W, H: H, pl: pl, src: img.getAttribute('src'), loaded: false, loading: false });
+    });
+
+    /* ---------- Progressive, downsampled textures (current ± 1 first) ---------- */
+    var MAX_TEX_W = 1280;
+    function loadFrame(f, i) {
+      if (f.loaded || f.loading) return;
+      f.loading = true;
+      var image = new Image();
+      image.onload = function () {
+        var scale = Math.min(1, MAX_TEX_W / image.naturalWidth);
+        var c = document.createElement('canvas');
+        c.width = Math.round(image.naturalWidth * scale);
+        c.height = Math.round(image.naturalHeight * scale);
+        var ctx = c.getContext('2d');
+        ctx.drawImage(image, 0, 0, c.width, c.height);
+        // file:// (double-clicked HTML): Chrome treats local PNGs as cross-origin, taints the canvas,
+        // and WebGL refuses the texture. Detect and degrade instead of showing empty frames.
+        try { ctx.getImageData(0, 0, 1, 1); }
+        catch (err) {
+          f.loading = false;
+          degrade('Images cannot be used as 3D textures when the page is opened directly from disk (file://). Serve the folder over http(s) — e.g. python -m http.server — to walk the 3D gallery.');
+          return;
+        }
+        var tex = new THREE.CanvasTexture(c);
+        tex.colorSpace = THREE.SRGBColorSpace;
+        tex.anisotropy = Math.min(4, renderer.capabilities.getMaxAnisotropy());
+        tex.generateMipmaps = true;
+        tex.minFilter = THREE.LinearMipmapLinearFilter;
+
+        // Re-size the picture plane to the TRUE aspect: nothing is ever cropped.
+        var aspect = c.width / c.height, W = f.W, H = W / aspect;
+        f.H = H;
+        f.pic.geometry.dispose(); f.pic.geometry = new THREE.PlaneGeometry(W, H);
+        f.matte.geometry.dispose(); f.matte.geometry = new THREE.PlaneGeometry(W + 0.10, H + 0.10);
+        f.box.geometry.dispose(); f.box.geometry = new THREE.BoxGeometry(W + 0.22, H + 0.22, 0.07);
+        f.pic.material.map = tex; f.pic.material.color.set(0xffffff); f.pic.material.needsUpdate = true;
+        f.loaded = true; f.loading = false;
+        if (i === current && !flight) applyPose(poseFor(current));
+        loader.classList.add('done');
+        requestRender();
+      };
+      image.onerror = function () { f.loading = false; loader.classList.add('done'); };
+      image.src = f.src;
+    }
+    function loadAround(i) {
+      loadFrame(frames[i], i);
+      if (frames[i + 1]) loadFrame(frames[i + 1], i + 1);
+      if (frames[i - 1]) loadFrame(frames[i - 1], i - 1);
+    }
+    loadAround(0);
+    var idle = window.requestIdleCallback || function (fn) { setTimeout(fn, 1500); };
+    idle(function () { frames.forEach(loadFrame); });
+
+    /* ---------- Camera shots: one pose per stop, deliberately varied (Prezi-style) ----------
+       kind 'overview' = explicit pose. Otherwise: yaw (deg, + = displaced toward the entrance),
+       d = preferred distance, m = fill margin (1.1 tight … 1.7 wide), dy = camera height offset. */
+    var SHOTS = [
+      { kind: 'overview', pos: [0, 1.15, -0.7], target: [0, EYE_Y + 0.15, -LENGTH], fov: 60 },   // 0 · the whole gallery from the entrance
+      { yaw: 30, d: 2.7, m: 1.35, dy: 0.15 },   // 1 · arrive at an angle
+      { yaw: 0, d: 2.0, m: 1.12, dy: 0.0 },     // 2 · tight, straight on
+      { yaw: -18, d: 3.3, m: 1.55, dy: 0.40 },  // 3 · wider, slightly elevated
+      { yaw: 0, d: 2.3, m: 1.20, dy: -0.15 },   // 4 · straight, low — looking up at the piece
+      { yaw: 22, d: 3.8, m: 1.70, dy: 0.55 },   // 5 · wide establishing shot to open Part II
+      { yaw: 0, d: 2.1, m: 1.15, dy: 0.05 },    // 6 · tight
+      { yaw: -26, d: 2.9, m: 1.40, dy: 0.20 },  // 7 · three-quarter
+      { yaw: 8, d: 2.4, m: 1.22, dy: 0.10 },    // 8 · nearly straight
+      { kind: 'overview', pos: [0, 1.35, -LENGTH + 1.4], target: [0, EYE_Y + 0.2, 0], fov: 62 } // 9 · turn around: the path you walked
+    ];
+
+    // The part of the canvas NOT covered by the reading panel is where the subject is framed.
+    var region = { w: 1, h: 1, fx: 0.5, fy: 0.5, ax: 0.5, ay: 0.5, fullH: 1 };
+    function layoutRegion() {
+      var w = stage.clientWidth, h = stage.clientHeight;
+      if (!w || !h) return false;
+      var fx = 0.5, fy = 0.5, ax = 0.5, ay = 0.5;
+      if (mdQuery.matches) {
+        var visW = Math.max(w * 0.4, w - panel.offsetWidth);
+        fx = ax = visW / 2 / w;
+      } else {
+        var visH = Math.max(h * 0.35, h - panel.offsetHeight);
+        fy = ay = visH / 2 / h;
+      }
+      var fullW = 2 * (1 - fx) * w, fullH = 2 * (1 - fy) * h;
+      renderer.setSize(w, h, false);
+      camera.aspect = fullW / fullH;
+      camera.setViewOffset(fullW, fullH, (1 - 2 * fx) * w, (1 - 2 * fy) * h, w, h);
+      region = { w: w, h: h, fx: fx, fy: fy, ax: ax, ay: ay, fullH: fullH };
+      return true;
+    }
+
+    function poseFor(i) {
+      var s = SHOTS[i], f = frames[i];
+      var maxTan = Math.tan(THREE.MathUtils.degToRad(FOV_MAX / 2));
+      if (s.kind === 'overview') {
+        var fov = s.fov;
+        if (!mdQuery.matches) fov = Math.min(FOV_MAX, fov * 1.25);   // portrait: open up so the hall still reads
+        return { pos: new THREE.Vector3().fromArray(s.pos), target: new THREE.Vector3().fromArray(s.target), fov: fov };
+      }
+      var pl = f.pl, yawR = THREE.MathUtils.degToRad(s.yaw);
+      var dir = new THREE.Vector3(pl.normal.x * Math.cos(yawR), 0, Math.sin(yawR)); // toward +z = toward entrance
+      var ar = region.w / region.h;
+      // Half-tangent of the visible region needed so the piece (with margin) fits the uncovered area
+      var d = s.d;
+      var T = Math.max((f.H * s.m / (2 * d)) / (2 * region.ay), (f.W * s.m / (2 * d)) / (ar * 2 * region.ax));
+      var tanFull = T * (region.fullH / region.h);
+      var dMax = 5.7 / Math.cos(yawR);
+      if (tanFull > maxTan) {                       // too wide for the lens: step back instead of distorting
+        var d2 = Math.min(dMax, d * tanFull / maxTan);
+        tanFull = tanFull * d / d2; d = d2;
+        if (tanFull > maxTan) tanFull = maxTan;
+      }
+      var fovDeg = THREE.MathUtils.clamp(2 * THREE.MathUtils.radToDeg(Math.atan(tanFull)), 28, FOV_MAX);
+      var pos = pl.pos.clone().add(dir.multiplyScalar(d));
+      pos.y += s.dy;
+      pos.z = THREE.MathUtils.clamp(pos.z, -LENGTH + 0.6, -0.6);
+      return { pos: pos, target: pl.pos.clone(), fov: fovDeg };
+    }
+
+    function applyPose(p) {
+      camera.position.copy(p.pos);
+      camTarget.copy(p.target);
+      camera.fov = p.fov;
+      camera.lookAt(camTarget);
+      camera.updateProjectionMatrix();
+      requestRender();
+    }
+
+    /* ---------- Flight: one cinematic move per advance, eased along a gentle arc ---------- */
+    var flight = null;
+    var rafId = null;
+    function requestRender() { if (!rafId) rafId = requestAnimationFrame(tick); }
+    function ease(t) { return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2; }
+
+    function flyTo(i, onDone) {
+      layoutRegion();
+      var to = poseFor(i);
+      loadAround(i);
+      frames.forEach(function (f, idx) { f.washTarget = idx === i ? 0.62 : 0.30; });
+      if (reduceMotion) { flight = null; applyPose(to); onDone && onDone(); return; }
+      var from = { pos: camera.position.clone(), target: camTarget.clone(), fov: camera.fov };
+      var dist = from.pos.distanceTo(to.pos);
+      // Control point: pull toward the centre aisle and lift a little → "step back, walk, arrive"
+      var ctrl = from.pos.clone().lerp(to.pos, 0.5);
+      ctrl.x *= 0.35; ctrl.y += 0.25 + Math.min(0.6, dist * 0.03);
+      flight = { from: from, to: to, ctrl: ctrl, start: performance.now(), dur: THREE.MathUtils.clamp(1100 + dist * 80, 1200, 2200), onDone: onDone };
+      requestRender();
+    }
+
+    var tmpA = new THREE.Vector3(), tmpB = new THREE.Vector3();
+    function tick(now) {
+      rafId = null;
+      var keepGoing = false;
+
+      if (flight) {
+        var t = Math.min(1, (now - flight.start) / flight.dur), e = ease(t);
+        // Quadratic Bézier position, linear target/fov
+        tmpA.lerpVectors(flight.from.pos, flight.ctrl, e);
+        tmpB.lerpVectors(flight.ctrl, flight.to.pos, e);
+        camera.position.lerpVectors(tmpA, tmpB, e);
+        camTarget.lerpVectors(flight.from.target, flight.to.target, e);
+        camera.fov = flight.from.fov + (flight.to.fov - flight.from.fov) * e;
+        camera.lookAt(camTarget);
+        camera.updateProjectionMatrix();
+        if (t >= 1) { var done = flight.onDone; flight = null; done && done(); }
+        else keepGoing = true;
+      }
+
+      // Spotlight emphasis on the active piece
+      frames.forEach(function (f) {
+        var target = f.washTarget == null ? 0.30 : f.washTarget;
+        var o = f.wash.material.opacity;
+        var n = reduceMotion ? target : o + (target - o) * 0.12;
+        if (Math.abs(n - target) > 0.004) keepGoing = true; else n = target;
+        f.wash.material.opacity = n;
+      });
+
+      renderer.render(scene, camera);
+      if (degraded) return;
+      if (keepGoing) requestRender();
+    }
+
+    document.addEventListener('visibilitychange', function () {
+      if (document.hidden) { if (rafId) { cancelAnimationFrame(rafId); rafId = null; } }
+      else requestRender();
+    });
+
+    function resize() {
+      if (!layoutRegion()) return;
+      if (flight) flight.to = poseFor(current);
+      else applyPose(poseFor(current));
+    }
+    if (window.ResizeObserver) new ResizeObserver(resize).observe(stage);
+    window.addEventListener('resize', resize);
+    layoutRegion();
+    applyPose(poseFor(0));
+
+    /* ---------- Touch: a swipe on the stage walks one stop (no free-roam by design) ---------- */
+    var el = renderer.domElement;
+    var sx = 0, sy = 0, st = 0, tracking = false;
+    el.addEventListener('pointerdown', function (e) { tracking = true; sx = e.clientX; sy = e.clientY; st = performance.now(); });
+    el.addEventListener('pointerup', function (e) {
+      if (!tracking) return; tracking = false;
+      var dx = e.clientX - sx, dy = e.clientY - sy, dt = performance.now() - st;
+      if (dt > 900) return;
+      if (Math.abs(dx) > 48 && Math.abs(dx) > Math.abs(dy)) goTo(current + (dx < 0 ? 1 : -1));
+      else if (Math.abs(dy) > 60) goTo(current + (dy < 0 ? 1 : -1));
+    });
+    el.addEventListener('pointercancel', function () { tracking = false; });
+    // Trackpad / wheel: one step per gesture
+    var wheelLock = 0;
+    el.addEventListener('wheel', function (e) {
+      e.preventDefault();
+      var d = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
+      var now = performance.now();
+      if (Math.abs(d) < 18 || now - wheelLock < 700) return;
+      wheelLock = now;
+      goTo(current + (d > 0 ? 1 : -1));
+    }, { passive: false });
+
+    return {
+      flyTo: flyTo,
+      dispose: function () {
+        if (rafId) { cancelAnimationFrame(rafId); rafId = null; }
+        flight = null;
+        try { renderer.dispose(); } catch (e) {}
+        if (renderer.domElement.parentNode) renderer.domElement.parentNode.removeChild(renderer.domElement);
+      }
+    };
+
+    /* ---------- Procedural textures (tiny canvases; no image downloads) ---------- */
+    function makeRadialTexture(inner, outer) {
+      var c = document.createElement('canvas'); c.width = c.height = 256;
+      var g = c.getContext('2d');
+      var grad = g.createRadialGradient(128, 128, 0, 128, 128, 128);
+      grad.addColorStop(0, inner); grad.addColorStop(1, outer);
+      g.fillStyle = grad; g.fillRect(0, 0, 256, 256);
+      return new THREE.CanvasTexture(c);
+    }
+    function makePlankTexture() {
+      var c = document.createElement('canvas'); c.width = c.height = 512;
+      var g = c.getContext('2d');
+      var rows = 8, rh = 512 / rows, seed = 7;
+      function rnd() { seed = (seed * 9301 + 49297) % 233280; return seed / 233280; }
+      for (var r = 0; r < rows; r++) {
+        var l = 62 + Math.round(rnd() * 10);
+        g.fillStyle = 'hsl(30, 34%, ' + l + '%)';
+        g.fillRect(0, r * rh, 512, rh);
+        // grain
+        g.strokeStyle = 'rgba(80,50,25,0.10)';
+        for (var k = 0; k < 14; k++) { var y = r * rh + rnd() * rh; g.beginPath(); g.moveTo(0, y); g.lineTo(512, y + (rnd() - 0.5) * 6); g.stroke(); }
+        // seams between planks and staggered end joints
+        g.fillStyle = 'rgba(60,35,15,0.35)'; g.fillRect(0, r * rh, 512, 2);
+        var jx = rnd() * 512; g.fillRect(jx, r * rh, 2, rh);
+      }
+      var t = new THREE.CanvasTexture(c);
+      t.colorSpace = THREE.SRGBColorSpace;
+      return t;
+    }
+  }
+})();
+</script>
+</body>
+</html>
