@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Body Language — Design Variants</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          'warm-cream': '#FCFBF8',
+          'warm-beige': '#F3EFE9',
+          'sil-blue': '#0D3C61',
+          'sil-blue-light': '#1A5A8F',
+        },
+        fontFamily: {
+          sans: ['Inter', 'system-ui', 'sans-serif'],
+        },
+      },
+    },
+  };
+</script>
+<style>
+  html { scroll-behavior: smooth; }
+  body { font-family: 'Inter', system-ui, sans-serif; }
+
+  /* Scaled live-preview of each variant, cropped to a phone-shaped frame */
+  .preview-frame {
+    position: relative;
+    overflow: hidden;
+    aspect-ratio: 375 / 700;
+    background: #EFEBE4;
+  }
+  .preview-frame iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 375px;
+    height: 700px;
+    border: 0;
+    transform-origin: top left;
+    pointer-events: none;
+  }
+  .preview-frame::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    box-shadow: inset 0 -40px 40px -20px rgba(0,0,0,0.12);
+  }
+
+  .card:hover .preview-frame img,
+  .card:focus-within .preview-frame {
+    filter: brightness(1.02);
+  }
+
+  ::selection { background: #0D3C61; color: #FCFBF8; }
+</style>
+</head>
+<body class="bg-warm-cream text-gray-900 antialiased">
+
+  <header class="border-b-4 border-sil-blue bg-warm-beige">
+    <div class="max-w-6xl mx-auto px-5 sm:px-8 py-12 sm:py-16 text-center">
+      <p class="text-xs sm:text-sm font-bold tracking-[0.2em] uppercase text-sil-blue-light mb-3">SIL Micro-Learning &middot; Design Review</p>
+      <h1 class="text-3xl sm:text-5xl font-extrabold text-gray-900 leading-tight mb-4">
+        Mastering Body Language
+      </h1>
+      <p class="text-base sm:text-lg text-gray-700 max-w-2xl mx-auto leading-relaxed">
+        Five mobile-first presentation concepts for the same micro-module content. Tap any card to open the full experience &mdash; each preview below shows the live page, scaled down.
+      </p>
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-5 sm:px-8 py-10 sm:py-16">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+
+      <!-- Variant 1 -->
+      <a href="variant-1-journey.html" target="_blank" rel="noopener" class="card group block rounded-2xl overflow-hidden bg-white border border-stone-200 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-sil-blue">
+        <div class="preview-frame" data-frame>
+          <iframe src="variant-1-journey.html" loading="lazy" tabindex="-1" aria-hidden="true" title="Preview of Guided Journey variant"></iframe>
+        </div>
+        <div class="p-5 sm:p-6">
+          <div class="flex items-center gap-2 mb-2">
+            <span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-sil-blue text-white text-xs font-bold shrink-0">1</span>
+            <span class="flex gap-1" aria-hidden="true">
+              <span class="w-3 h-3 rounded-full" style="background:#FCFBF8;border:1px solid #ddd"></span>
+              <span class="w-3 h-3 rounded-full" style="background:#0D3C61"></span>
+              <span class="w-3 h-3 rounded-full" style="background:#1A5A8F"></span>
+            </span>
+          </div>
+          <h2 class="text-lg sm:text-xl font-bold text-gray-900 mb-1.5 group-hover:text-sil-blue transition-colors">The Guided Journey</h2>
+          <p class="text-sm text-gray-600 leading-relaxed mb-4">Warm editorial scrollytelling &mdash; a sticky progress bar, alternating image/text sections, and gentle scroll-reveal animations.</p>
+          <span class="inline-flex items-center gap-1.5 text-sm font-semibold text-sil-blue">
+            Open full page
+            <svg class="w-4 h-4 transition-transform group-hover:translate-x-0.5" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M7 4l6 6-6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+        </div>
+      </a>
+
+      <!-- Variant 2 -->
+      <a href="variant-2-deck.html" target="_blank" rel="noopener" class="card group block rounded-2xl overflow-hidden bg-white border border-stone-200 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-sil-blue">
+        <div class="preview-frame" data-frame>
+          <iframe src="variant-2-deck.html" loading="lazy" tabindex="-1" aria-hidden="true" title="Preview of Interactive Deck variant"></iframe>
+        </div>
+        <div class="p-5 sm:p-6">
+          <div class="flex items-center gap-2 mb-2">
+            <span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-sil-blue text-white text-xs font-bold shrink-0">2</span>
+            <span class="flex gap-1" aria-hidden="true">
+              <span class="w-3 h-3 rounded-full" style="background:#0D1B2A"></span>
+              <span class="w-3 h-3 rounded-full" style="background:#D4A03C"></span>
+              <span class="w-3 h-3 rounded-full" style="background:#F5F1E8;border:1px solid #ddd"></span>
+            </span>
+          </div>
+          <h2 class="text-lg sm:text-xl font-bold text-gray-900 mb-1.5 group-hover:text-sil-blue transition-colors">The Interactive Deck</h2>
+          <p class="text-sm text-gray-600 leading-relaxed mb-4">Dark, app-like swipeable story cards with gold accents, a live &ldquo;card X/9&rdquo; counter, and progress dots.</p>
+          <span class="inline-flex items-center gap-1.5 text-sm font-semibold text-sil-blue">
+            Open full page
+            <svg class="w-4 h-4 transition-transform group-hover:translate-x-0.5" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M7 4l6 6-6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+        </div>
+      </a>
+
+      <!-- Variant 3 -->
+      <a href="variant-3-fieldguide.html" target="_blank" rel="noopener" class="card group block rounded-2xl overflow-hidden bg-white border border-stone-200 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-sil-blue">
+        <div class="preview-frame" data-frame>
+          <iframe src="variant-3-fieldguide.html" loading="lazy" tabindex="-1" aria-hidden="true" title="Preview of Field Guide variant"></iframe>
+        </div>
+        <div class="p-5 sm:p-6">
+          <div class="flex items-center gap-2 mb-2">
+            <span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-sil-blue text-white text-xs font-bold shrink-0">3</span>
+            <span class="flex gap-1" aria-hidden="true">
+              <span class="w-3 h-3 rounded-full" style="background:#FAF6EC;border:1px solid #ddd"></span>
+              <span class="w-3 h-3 rounded-full" style="background:#2F5233"></span>
+              <span class="w-3 h-3 rounded-full" style="background:#B5652E"></span>
+            </span>
+          </div>
+          <h2 class="text-lg sm:text-xl font-bold text-gray-900 mb-1.5 group-hover:text-sil-blue transition-colors">The Field Guide</h2>
+          <p class="text-sm text-gray-600 leading-relaxed mb-4">A parchment travel-journal aesthetic with tabbed chapters and passport-stamp accordion &ldquo;field notes.&rdquo;</p>
+          <span class="inline-flex items-center gap-1.5 text-sm font-semibold text-sil-blue">
+            Open full page
+            <svg class="w-4 h-4 transition-transform group-hover:translate-x-0.5" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M7 4l6 6-6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+        </div>
+      </a>
+
+      <!-- Variant 4 -->
+      <a href="variant-4-workbook.html" target="_blank" rel="noopener" class="card group block rounded-2xl overflow-hidden bg-white border border-stone-200 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-sil-blue">
+        <div class="preview-frame" data-frame>
+          <iframe src="variant-4-workbook.html" loading="lazy" tabindex="-1" aria-hidden="true" title="Preview of Micro-Workbook variant"></iframe>
+        </div>
+        <div class="p-5 sm:p-6">
+          <div class="flex items-center gap-2 mb-2">
+            <span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-sil-blue text-white text-xs font-bold shrink-0">4</span>
+            <span class="flex gap-1" aria-hidden="true">
+              <span class="w-3 h-3 rounded-full" style="background:#FDF3ED;border:1px solid #ddd"></span>
+              <span class="w-3 h-3 rounded-full" style="background:#0D3C61"></span>
+              <span class="w-3 h-3 rounded-full" style="background:#F1F7F1;border:1px solid #ddd"></span>
+            </span>
+          </div>
+          <h2 class="text-lg sm:text-xl font-bold text-gray-900 mb-1.5 group-hover:text-sil-blue transition-colors">The Micro-Workbook</h2>
+          <p class="text-sm text-gray-600 leading-relaxed mb-4">A friendly, gamified self-check workbook &mdash; mark topics learned, watch progress fill, and celebrate completion.</p>
+          <span class="inline-flex items-center gap-1.5 text-sm font-semibold text-sil-blue">
+            Open full page
+            <svg class="w-4 h-4 transition-transform group-hover:translate-x-0.5" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M7 4l6 6-6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+        </div>
+      </a>
+
+      <!-- Variant 5 -->
+      <a href="variant-5-briefing.html" target="_blank" rel="noopener" class="card group block rounded-2xl overflow-hidden bg-white border border-stone-200 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-sil-blue">
+        <div class="preview-frame" data-frame>
+          <iframe src="variant-5-briefing.html" loading="lazy" tabindex="-1" aria-hidden="true" title="Preview of Executive Briefing variant"></iframe>
+        </div>
+        <div class="p-5 sm:p-6">
+          <div class="flex items-center gap-2 mb-2">
+            <span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-sil-blue text-white text-xs font-bold shrink-0">5</span>
+            <span class="flex gap-1" aria-hidden="true">
+              <span class="w-3 h-3 rounded-full" style="background:#14181C"></span>
+              <span class="w-3 h-3 rounded-full" style="background:#0D3C61"></span>
+              <span class="w-3 h-3 rounded-full" style="background:#FAFAF8;border:1px solid #ddd"></span>
+            </span>
+          </div>
+          <h2 class="text-lg sm:text-xl font-bold text-gray-900 mb-1.5 group-hover:text-sil-blue transition-colors">The Executive Briefing</h2>
+          <p class="text-sm text-gray-600 leading-relaxed mb-4">A minimal ink-and-blue magazine briefing with serif pull-quotes, a jump-to-section contents panel, and tap-to-enlarge images.</p>
+          <span class="inline-flex items-center gap-1.5 text-sm font-semibold text-sil-blue">
+            Open full page
+            <svg class="w-4 h-4 transition-transform group-hover:translate-x-0.5" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M7 4l6 6-6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+        </div>
+      </a>
+
+      <!-- Original sample -->
+      <a href="body_language_micro_module.html" target="_blank" rel="noopener" class="card group block rounded-2xl overflow-hidden bg-white border border-dashed border-stone-300 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-sil-blue">
+        <div class="preview-frame" data-frame>
+          <iframe src="body_language_micro_module.html" loading="lazy" tabindex="-1" aria-hidden="true" title="Preview of original sample"></iframe>
+        </div>
+        <div class="p-5 sm:p-6">
+          <div class="flex items-center gap-2 mb-2">
+            <span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-stone-400 text-white text-xs font-bold shrink-0">&#8226;</span>
+            <span class="text-xs font-bold tracking-wider uppercase text-stone-400">Reference</span>
+          </div>
+          <h2 class="text-lg sm:text-xl font-bold text-gray-900 mb-1.5 group-hover:text-sil-blue transition-colors">Original Sample</h2>
+          <p class="text-sm text-gray-600 leading-relaxed mb-4">The starting-point layout these five variants were designed from and improved upon.</p>
+          <span class="inline-flex items-center gap-1.5 text-sm font-semibold text-sil-blue">
+            Open full page
+            <svg class="w-4 h-4 transition-transform group-hover:translate-x-0.5" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M7 4l6 6-6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+        </div>
+      </a>
+
+    </div>
+  </main>
+
+  <footer class="border-t border-stone-200">
+    <div class="max-w-6xl mx-auto px-5 sm:px-8 py-8 text-center">
+      <p class="text-xs sm:text-sm text-gray-500">SIL Micro-Learning Module &middot; Body Language &middot; Design Review</p>
+    </div>
+  </footer>
+
+  <script>
+    (function () {
+      var frames = document.querySelectorAll('[data-frame]');
+
+      function scaleFrame(frame) {
+        var iframe = frame.querySelector('iframe');
+        if (!iframe) return;
+        var scale = frame.clientWidth / 375;
+        iframe.style.transform = 'scale(' + scale + ')';
+      }
+
+      function scaleAll() {
+        frames.forEach(scaleFrame);
+      }
+
+      window.addEventListener('load', scaleAll);
+      window.addEventListener('resize', function () {
+        window.requestAnimationFrame(scaleAll);
+      });
+
+      if (window.ResizeObserver) {
+        var ro = new ResizeObserver(function (entries) {
+          entries.forEach(function (entry) {
+            scaleFrame(entry.target);
+          });
+        });
+        frames.forEach(function (f) { ro.observe(f); });
+      }
+
+      // Run once immediately in case load already fired
+      scaleAll();
+    })();
+  </script>
+
+</body>
+</html>
