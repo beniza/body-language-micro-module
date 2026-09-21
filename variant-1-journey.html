@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Mastering Body Language — A Guided Journey</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          'warm-cream': '#FCFBF8',
+          'warm-grey': '#E8E5E1',
+          'warm-beige': '#F3EFE9',
+          'sil-blue': '#0D3C61',
+          'sil-blue-light': '#1A5A8F',
+          'sil-gold': '#B58A3E'
+        },
+        fontFamily: {
+          sans: ['Inter', 'system-ui', 'sans-serif'],
+        }
+      }
+    }
+  }
+</script>
+<style>
+  html { scroll-behavior: smooth; }
+  body { font-family: 'Inter', system-ui, sans-serif; color: #2A2A28; }
+  strong { color: #0D3C61; font-weight: 700; }
+
+  .reveal {
+    opacity: 0;
+    transform: translateY(28px);
+    transition: opacity 0.7s ease-out, transform 0.7s ease-out;
+  }
+  .reveal.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .reveal-delay-1 { transition-delay: 0.08s; }
+  .reveal-delay-2 { transition-delay: 0.16s; }
+
+  #progress-bar {
+    transform-origin: left;
+    transform: scaleX(0);
+    transition: transform 0.1s linear;
+  }
+
+  .step-pill {
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .reveal { transition: none; opacity: 1; transform: none; }
+  }
+
+  .chapter-divider {
+    background-image: radial-gradient(circle at 20% 20%, rgba(255,255,255,0.06), transparent 45%),
+                       radial-gradient(circle at 80% 80%, rgba(255,255,255,0.06), transparent 45%);
+  }
+</style>
+</head>
+<body class="bg-warm-cream antialiased selection:bg-sil-blue selection:text-white">
+
+  <!-- Sticky scroll progress bar -->
+  <div class="fixed top-0 left-0 w-full h-1 bg-warm-grey/60 z-50">
+    <div id="progress-bar" class="h-full w-full bg-gradient-to-r from-sil-blue to-sil-blue-light"></div>
+  </div>
+
+  <!-- Floating step indicator -->
+  <div id="step-pill" class="step-pill fixed bottom-5 left-1/2 -translate-x-1/2 z-40 bg-sil-blue/90 text-white text-xs font-semibold tracking-wide px-4 py-2 rounded-full shadow-lg shadow-sil-blue/30 flex items-center gap-2">
+    <span id="step-current">1</span><span class="opacity-60">/</span><span id="step-total">9</span>
+    <span id="step-label" class="hidden sm:inline font-normal opacity-90">— Introduction</span>
+  </div>
+
+  <!-- HERO -->
+  <header class="relative bg-warm-beige pt-20 pb-16 md:pt-28 md:pb-24 border-b-4 border-sil-blue overflow-hidden">
+    <div class="absolute inset-0 opacity-[0.04] pointer-events-none" style="background-image: radial-gradient(circle, #0D3C61 1px, transparent 1px); background-size: 22px 22px;"></div>
+    <div class="relative max-w-3xl mx-auto px-6 text-center">
+      <p class="text-sil-blue-light font-bold tracking-widest uppercase text-xs sm:text-sm mb-4">Micro-Learning Module</p>
+      <h1 class="text-4xl sm:text-5xl md:text-6xl font-extrabold text-gray-900 leading-tight mb-6">
+        Mastering Body Language
+      </h1>
+      <p class="text-lg md:text-xl text-gray-700 leading-relaxed max-w-xl mx-auto">
+        A self-paced micro-module on posture, presence, and cross-cultural awareness in professional communication.
+      </p>
+      <div class="mt-9 flex items-center justify-center gap-2 text-sm text-sil-blue-light font-semibold">
+        <svg class="w-5 h-5 animate-bounce" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 14l-7 7m0 0l-7-7m7 7V3" /></svg>
+        <span>Scroll to begin</span>
+      </div>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- SECTION 1: Introduction -->
+    <section id="step-1" data-step="1" data-label="Introduction" class="py-16 md:py-24 bg-warm-cream scroll-mt-24">
+      <div class="max-w-6xl mx-auto px-6 flex flex-col md:flex-row items-center gap-10 md:gap-14">
+        <div class="reveal w-full md:w-1/2">
+          <div class="aspect-[4/3] rounded-2xl overflow-hidden shadow-lg shadow-black/5 border border-stone-200">
+            <img src="images/Image_1_Posture_and_Confidence.png" alt="A confident professional sits at her desk in a warm, welcoming office, illustrating openness and readiness to communicate." class="w-full h-full object-cover" loading="eager">
+          </div>
+        </div>
+        <div class="reveal reveal-delay-1 w-full md:w-1/2">
+          <h2 class="text-sm font-bold text-sil-blue uppercase tracking-wider mb-2">Step 1 · Introduction</h2>
+          <h3 class="text-3xl font-bold text-gray-900 mb-6">Communication Beyond Words</h3>
+          <div class="border-l-4 border-sil-blue pl-6">
+            <p class="text-lg text-gray-700 leading-relaxed">
+              Effective communicators <strong>adapt their body language</strong> to build understanding. Awareness of cultural differences in body language demonstrates respect, strengthens relationships, and helps <strong>prevent unintended misunderstandings</strong>.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CHAPTER 1 DIVIDER -->
+    <section class="chapter-divider relative bg-sil-blue py-14 md:py-20 overflow-hidden">
+      <div class="max-w-3xl mx-auto px-6 text-center reveal">
+        <p class="text-sil-gold font-bold tracking-widest uppercase text-xs sm:text-sm mb-3">Part One</p>
+        <h2 class="text-3xl md:text-4xl font-extrabold text-white mb-3">The Fundamentals</h2>
+        <p class="text-warm-beige/80 text-base md:text-lg">How you present yourself, moment to moment.</p>
+      </div>
+    </section>
+
+    <!-- SECTION 2: Physical Posture -->
+    <section id="step-2" data-step="2" data-label="Physical Posture" class="py-16 md:py-24 bg-warm-beige scroll-mt-24">
+      <div class="max-w-6xl mx-auto px-6 flex flex-col md:flex-row-reverse items-center gap-10 md:gap-14">
+        <div class="reveal w-full md:w-1/2">
+          <div class="aspect-[4/3] rounded-2xl overflow-hidden shadow-lg shadow-black/5 border border-stone-200">
+            <img src="images/Image_2a_Gestures_and_Meaning.png" alt="Illustration of a professional facing a colleague with callouts: face the speaker, maintain open posture, avoid crossed arms." class="w-full h-full object-cover" loading="lazy">
+          </div>
+        </div>
+        <div class="reveal reveal-delay-1 w-full md:w-1/2">
+          <h2 class="text-sm font-bold text-sil-blue uppercase tracking-wider mb-2">Step 2 · Physical Posture</h2>
+          <h3 class="text-3xl font-bold text-gray-900 mb-2">How You Carry Your Body</h3>
+          <div class="border-l-4 border-sil-blue pl-6 mt-4">
+            <ul class="space-y-3 text-lg text-gray-700 leading-relaxed">
+              <li class="flex gap-3"><span class="text-sil-blue font-bold">✓</span><span>Face the speaker and give them your <strong>full attention</strong>.</span></li>
+              <li class="flex gap-3"><span class="text-sil-blue font-bold">✓</span><span>Stand or sit with an <strong>open, upright posture</strong> to project confidence.</span></li>
+              <li class="flex gap-3"><span class="text-sil-blue font-bold">✓</span><span>Avoid closed-off behaviors such as <strong>crossed arms, slouching, or looking down</strong>.</span></li>
+              <li class="flex gap-3"><span class="text-sil-blue font-bold">✓</span><span>Invite participation through an open posture and welcoming orientation toward others.</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 3: Physical Distance -->
+    <section id="step-3" data-step="3" data-label="Physical Distance" class="py-16 md:py-24 bg-warm-cream scroll-mt-24">
+      <div class="max-w-6xl mx-auto px-6 flex flex-col md:flex-row items-center gap-10 md:gap-14">
+        <div class="reveal w-full md:w-1/2">
+          <div class="aspect-[4/3] rounded-2xl overflow-hidden shadow-lg shadow-black/5 border border-stone-200">
+            <img src="images/Image_3_Responsive_Communication.png" alt="Two colleagues at a desk with callouts: respect personal space, lean forward to listen, adapt to others' comfort." class="w-full h-full object-cover" loading="lazy">
+          </div>
+        </div>
+        <div class="reveal reveal-delay-1 w-full md:w-1/2">
+          <h2 class="text-sm font-bold text-sil-blue uppercase tracking-wider mb-2">Step 3 · Physical Distance</h2>
+          <h3 class="text-3xl font-bold text-gray-900 mb-2">How You Position Yourself</h3>
+          <div class="border-l-4 border-sil-blue pl-6 mt-4">
+            <ul class="space-y-3 text-lg text-gray-700 leading-relaxed">
+              <li class="flex gap-3"><span class="text-sil-blue font-bold">✓</span><span><strong>Respect personal space</strong> while remaining approachable.</span></li>
+              <li class="flex gap-3"><span class="text-sil-blue font-bold">✓</span><span><strong>Lean slightly forward</strong> to signal interest and engagement while listening.</span></li>
+              <li class="flex gap-3"><span class="text-sil-blue font-bold">✓</span><span>Adapt your position and proximity to help others feel <strong>comfortable and included</strong>.</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 4: Facial Expression -->
+    <section id="step-4" data-step="4" data-label="Facial Expression" class="py-16 md:py-24 bg-warm-beige scroll-mt-24">
+      <div class="max-w-6xl mx-auto px-6 flex flex-col md:flex-row-reverse items-center gap-10 md:gap-14">
+        <div class="reveal w-full md:w-1/2">
+          <div class="aspect-[4/3] rounded-2xl overflow-hidden shadow-lg shadow-black/5 border border-stone-200">
+            <img src="images/Image_4_Facial_Expression.png" alt="Portrait of a smiling professional with callouts: maintain eye contact, nod to show understanding, smile to welcome others, match the emotional tone." class="w-full h-full object-cover" loading="lazy">
+          </div>
+        </div>
+        <div class="reveal reveal-delay-1 w-full md:w-1/2">
+          <h2 class="text-sm font-bold text-sil-blue uppercase tracking-wider mb-2">Step 4 · Facial Expression</h2>
+          <h3 class="text-3xl font-bold text-gray-900 mb-2">What Your Face Communicates</h3>
+          <div class="border-l-4 border-sil-blue pl-6 mt-4">
+            <ul class="space-y-3 text-lg text-gray-700 leading-relaxed">
+              <li class="flex gap-3"><span class="text-sil-blue font-bold">✓</span><span>Maintain <strong>appropriate eye contact</strong> to communicate honesty and attentiveness.</span></li>
+              <li class="flex gap-3"><span class="text-sil-blue font-bold">✓</span><span>Nod occasionally and use appropriate facial expressions to show understanding.</span></li>
+              <li class="flex gap-3"><span class="text-sil-blue font-bold">✓</span><span>Smile genuinely when appropriate to create a <strong>welcoming atmosphere</strong>.</span></li>
+              <li class="flex gap-3"><span class="text-sil-blue font-bold">✓</span><span>Match your facial expressions to the <strong>emotional tone</strong> of the conversation.</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 5: Demeanor -->
+    <section id="step-5" data-step="5" data-label="Demeanor" class="py-16 md:py-24 bg-warm-cream scroll-mt-24">
+      <div class="max-w-6xl mx-auto px-6 flex flex-col md:flex-row items-center gap-10 md:gap-14">
+        <div class="reveal w-full md:w-1/2">
+          <div class="aspect-[4/3] rounded-2xl overflow-hidden shadow-lg shadow-black/5 border border-stone-200">
+            <img src="images/Image_5_Demeanor.png" alt="Illustration of a professional with open hands, with callouts: match tone with body, avoid distracted behaviors, stay calm under pressure, use natural hand gestures." class="w-full h-full object-cover" loading="lazy">
+          </div>
+        </div>
+        <div class="reveal reveal-delay-1 w-full md:w-1/2">
+          <h2 class="text-sm font-bold text-sil-blue uppercase tracking-wider mb-2">Step 5 · Demeanor</h2>
+          <h3 class="text-3xl font-bold text-gray-900 mb-2">The Tone You Project</h3>
+          <div class="border-l-4 border-sil-blue pl-6 mt-4">
+            <ul class="space-y-3 text-lg text-gray-700 leading-relaxed">
+              <li class="flex gap-3"><span class="text-sil-blue font-bold">✓</span><span>Ensure your body language <strong>matches the tone</strong> of the words you are saying.</span></li>
+              <li class="flex gap-3"><span class="text-sil-blue font-bold">✓</span><span>Show respect by avoiding behaviors that suggest <strong>impatience or distraction</strong>.</span></li>
+              <li class="flex gap-3"><span class="text-sil-blue font-bold">✓</span><span>Maintain a <strong>calm, steady presence</strong>, especially during difficult conversations.</span></li>
+              <li class="flex gap-3"><span class="text-sil-blue font-bold">✓</span><span>Use natural, purposeful hand gestures to reinforce important ideas.</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CHAPTER 2 DIVIDER -->
+    <section class="chapter-divider relative bg-sil-blue py-14 md:py-20 overflow-hidden">
+      <div class="max-w-3xl mx-auto px-6 text-center reveal">
+        <p class="text-sil-gold font-bold tracking-widest uppercase text-xs sm:text-sm mb-3">Part Two</p>
+        <h2 class="text-3xl md:text-4xl font-extrabold text-white mb-3">Cultural Awareness</h2>
+        <p class="text-warm-beige/80 text-base md:text-lg">Body language means different things in different cultures.</p>
+      </div>
+    </section>
+
+    <!-- SECTION 6: Cultural Awareness intro -->
+    <section id="step-6" data-step="6" data-label="Cultural Awareness" class="py-16 md:py-24 bg-warm-beige scroll-mt-24">
+      <div class="max-w-6xl mx-auto px-6 flex flex-col md:flex-row-reverse items-center gap-10 md:gap-14">
+        <div class="reveal w-full md:w-1/2">
+          <div class="aspect-[4/3] rounded-2xl overflow-hidden shadow-lg shadow-black/5 border border-stone-200">
+            <img src="images/Image_6_Cultural_Differences.png" alt="Illustration of a professional connected to a global network of people, with callouts: recognize cultural differences, avoid assuming universal rules, observe adapt and ask." class="w-full h-full object-cover" loading="lazy">
+          </div>
+        </div>
+        <div class="reveal reveal-delay-1 w-full md:w-1/2">
+          <h2 class="text-sm font-bold text-sil-blue uppercase tracking-wider mb-2">Step 6 · Cultural Awareness</h2>
+          <h3 class="text-3xl font-bold text-gray-900 mb-6">Tendencies, Not Rules</h3>
+          <div class="border-l-4 border-sil-blue pl-6">
+            <p class="text-lg text-gray-700 leading-relaxed">
+              Be aware of cultural differences in gestures, eye contact, personal space, and levels of formality. The following points describe <strong>general cultural tendencies, not universal rules</strong>. Individual preferences, regional customs, and organizational culture should always be considered. When in doubt, <strong>observe first, adapt respectfully, and ask questions</strong> when appropriate.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 7: Formal vs Informal Posture -->
+    <section id="step-7" data-step="7" data-label="Formal vs. Informal Posture" class="py-16 md:py-24 bg-warm-cream scroll-mt-24">
+      <div class="max-w-6xl mx-auto px-6 flex flex-col md:flex-row items-center gap-10 md:gap-14">
+        <div class="reveal w-full md:w-1/2">
+          <div class="aspect-[4/3] rounded-2xl overflow-hidden shadow-lg shadow-black/5 border border-stone-200">
+            <img src="images/Image_7_Formal_vs_Informal_Posture.png" alt="Illustration comparing Western relaxed-but-attentive posture with Eastern formal and controlled posture." class="w-full h-full object-cover" loading="lazy">
+          </div>
+        </div>
+        <div class="reveal reveal-delay-1 w-full md:w-1/2">
+          <h2 class="text-sm font-bold text-sil-blue uppercase tracking-wider mb-2">Step 7 · Formality</h2>
+          <h3 class="text-3xl font-bold text-gray-900 mb-2">Formal vs. Informal Posture</h3>
+          <div class="border-l-4 border-sil-blue pl-6 mt-4">
+            <ul class="space-y-3 text-lg text-gray-700 leading-relaxed">
+              <li class="flex gap-3"><span class="text-sil-blue font-bold">✓</span><span>Western workplaces often encourage <strong>relaxed but attentive posture</strong> and expressive gestures.</span></li>
+              <li class="flex gap-3"><span class="text-sil-blue font-bold">✓</span><span>Many Eastern cultures place greater emphasis on <strong>formal posture, controlled movements</strong>, and showing respect through physical demeanor.</span></li>
+              <li class="flex gap-3"><span class="text-sil-blue font-bold">✓</span><span>When in doubt, <strong>begin with a more formal posture</strong> and adjust as you observe the communication style of those around you.</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 8: Personal Distance -->
+    <section id="step-8" data-step="8" data-label="Personal Distance" class="py-16 md:py-24 bg-warm-beige scroll-mt-24">
+      <div class="max-w-6xl mx-auto px-6 flex flex-col md:flex-row-reverse items-center gap-10 md:gap-14">
+        <div class="reveal w-full md:w-1/2">
+          <div class="aspect-[4/3] rounded-2xl overflow-hidden shadow-lg shadow-black/5 border border-stone-200">
+            <img src="images/Image_8_Personal_Distance.png" alt="Illustration comparing Western preference for more personal space with Eastern comfort with closer proximity." class="w-full h-full object-cover" loading="lazy">
+          </div>
+        </div>
+        <div class="reveal reveal-delay-1 w-full md:w-1/2">
+          <h2 class="text-sm font-bold text-sil-blue uppercase tracking-wider mb-2">Step 8 · Proximity</h2>
+          <h3 class="text-3xl font-bold text-gray-900 mb-2">Personal Distance Across Cultures</h3>
+          <div class="border-l-4 border-sil-blue pl-6 mt-4">
+            <ul class="space-y-3 text-lg text-gray-700 leading-relaxed">
+              <li class="flex gap-3"><span class="text-sil-blue font-bold">✓</span><span>Many Western cultures (North America, Northern Europe) generally prefer <strong>more personal space</strong> during conversation.</span></li>
+              <li class="flex gap-3"><span class="text-sil-blue font-bold">✓</span><span>Many Eastern cultures are often more comfortable standing closer to people they know well, though preferences vary widely by country and context.</span></li>
+              <li class="flex gap-3"><span class="text-sil-blue font-bold">✓</span><span>Observe and adapt to the other person's comfort level rather than <strong>assuming your own preference is universal</strong>.</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 9: Eye Contact -->
+    <section id="step-9" data-step="9" data-label="Eye Contact" class="py-16 md:py-24 bg-warm-cream scroll-mt-24">
+      <div class="max-w-6xl mx-auto px-6 flex flex-col md:flex-row items-center gap-10 md:gap-14">
+        <div class="reveal w-full md:w-1/2">
+          <div class="aspect-[4/3] rounded-2xl overflow-hidden shadow-lg shadow-black/5 border border-stone-200">
+            <img src="images/Image_9_Cultural_Eye_Contact.png" alt="Illustration comparing Western direct eye contact with Eastern sensitivity around prolonged eye contact, especially with elders or authority figures." class="w-full h-full object-cover" loading="lazy">
+          </div>
+        </div>
+        <div class="reveal reveal-delay-1 w-full md:w-1/2">
+          <h2 class="text-sm font-bold text-sil-blue uppercase tracking-wider mb-2">Step 9 · Eye Contact</h2>
+          <h3 class="text-3xl font-bold text-gray-900 mb-2">Cultural Eye Contact</h3>
+          <div class="border-l-4 border-sil-blue pl-6 mt-4">
+            <ul class="space-y-3 text-lg text-gray-700 leading-relaxed">
+              <li class="flex gap-3"><span class="text-sil-blue font-bold">✓</span><span>Many Western cultures view direct eye contact as a sign of <strong>confidence, honesty, and engagement</strong>.</span></li>
+              <li class="flex gap-3"><span class="text-sil-blue font-bold">✓</span><span>In some Eastern cultures, <strong>prolonged eye contact</strong> — particularly with elders or authority figures — may be viewed as disrespectful or confrontational.</span></li>
+              <li class="flex gap-3"><span class="text-sil-blue font-bold">✓</span><span>Aim for <strong>comfortable, respectful eye contact</strong> while remaining sensitive to cultural expectations.</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- KEY TAKEAWAYS -->
+    <section class="py-16 md:py-24 bg-warm-beige border-t-4 border-sil-blue">
+      <div class="max-w-4xl mx-auto px-6">
+        <div class="reveal text-center mb-10">
+          <h2 class="text-sm font-bold text-sil-blue uppercase tracking-wider mb-2">Before You Go</h2>
+          <h3 class="text-3xl md:text-4xl font-bold text-gray-900">Key Takeaways</h3>
+        </div>
+        <div class="reveal reveal-delay-1 grid sm:grid-cols-2 gap-4">
+          <div class="bg-white rounded-2xl p-6 shadow-sm border border-stone-200">
+            <p class="text-gray-700 leading-relaxed"><strong>Open posture builds trust.</strong> Facing the speaker, standing upright, and avoiding crossed arms all signal confidence and welcome.</p>
+          </div>
+          <div class="bg-white rounded-2xl p-6 shadow-sm border border-stone-200">
+            <p class="text-gray-700 leading-relaxed"><strong>Presence matches words.</strong> Your demeanor, expressions, and gestures should align with what you're saying — especially under pressure.</p>
+          </div>
+          <div class="bg-white rounded-2xl p-6 shadow-sm border border-stone-200">
+            <p class="text-gray-700 leading-relaxed"><strong>Distance and eye contact are cultural.</strong> Comfort levels around space and gaze vary widely — there's no single "correct" amount.</p>
+          </div>
+          <div class="bg-white rounded-2xl p-6 shadow-sm border border-stone-200">
+            <p class="text-gray-700 leading-relaxed"><strong>When unsure, start formal.</strong> Observe, adapt respectfully, and ask questions rather than assuming your norms are universal.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="bg-stone-900 text-stone-400 py-8 text-center">
+    <div class="max-w-6xl mx-auto px-6">
+      <p class="text-sm">SIL Micro-Learning Module · Body Language</p>
+    </div>
+  </footer>
+
+  <script>
+    (function () {
+      // Scroll progress bar
+      var progressBar = document.getElementById('progress-bar');
+      function updateProgress() {
+        var scrollTop = window.scrollY || document.documentElement.scrollTop;
+        var docHeight = document.documentElement.scrollHeight - window.innerHeight;
+        var ratio = docHeight > 0 ? Math.min(1, Math.max(0, scrollTop / docHeight)) : 0;
+        progressBar.style.transform = 'scaleX(' + ratio + ')';
+      }
+      window.addEventListener('scroll', updateProgress, { passive: true });
+      window.addEventListener('resize', updateProgress);
+      updateProgress();
+
+      // Step indicator
+      var steps = Array.prototype.slice.call(document.querySelectorAll('[data-step]'));
+      var totalEl = document.getElementById('step-total');
+      var currentEl = document.getElementById('step-current');
+      var labelEl = document.getElementById('step-label');
+      totalEl.textContent = String(steps.length);
+
+      var stepObserver = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            currentEl.textContent = entry.target.getAttribute('data-step');
+            labelEl.textContent = '— ' + entry.target.getAttribute('data-label');
+          }
+        });
+      }, { rootMargin: '-45% 0px -45% 0px', threshold: 0 });
+      steps.forEach(function (s) { stepObserver.observe(s); });
+
+      // Reveal on scroll
+      var revealEls = document.querySelectorAll('.reveal');
+      var revealObserver = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+            revealObserver.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.15 });
+      revealEls.forEach(function (el) { revealObserver.observe(el); });
+    })();
+  </script>
+
+</body>
+</html>

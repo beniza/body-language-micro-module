@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Mastering Body Language — Micro-Module</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          navy: { DEFAULT: '#0D1B2A', deep: '#0A1420', card: '#122437', edge: '#1B324A' },
+          gold: { DEFAULT: '#E3B23C', soft: '#F0D48A', dim: '#8A6A26' },
+          teal: { DEFAULT: '#3FA9A0', soft: '#7FCFC7' },
+          ivory: '#F0EBDD'
+        },
+        fontFamily: { sans: ['Manrope', 'system-ui', 'sans-serif'] },
+        boxShadow: { deck: '0 30px 80px -20px rgba(0,0,0,0.6)' }
+      }
+    }
+  }
+</script>
+<style>
+  html, body { height: 100%; }
+  body { background: #060C14; }
+  .deck-track { scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+  .deck-track::-webkit-scrollbar { display: none; }
+  .deck-card { scroll-snap-align: center; scroll-snap-stop: always; }
+  .dot { transition: width .35s ease, background-color .35s ease, opacity .35s ease; }
+  .btn-nav:disabled { opacity: .3; pointer-events: none; }
+  .btn-nav:focus-visible, .dot-btn:focus-visible { outline: 2px solid #E3B23C; outline-offset: 3px; }
+  .chapter-2 .chapter-tag { color: #7FCFC7; }
+  .fade-edge-l { background: linear-gradient(90deg, #0A1420 0%, rgba(10,20,32,0) 100%); }
+  .fade-edge-r { background: linear-gradient(270deg, #0A1420 0%, rgba(10,20,32,0) 100%); }
+</style>
+</head>
+<body class="antialiased text-ivory font-sans selection:bg-gold selection:text-navy-deep">
+
+<div class="min-h-[100dvh] flex items-center justify-center md:py-10">
+  <div class="relative w-full md:max-w-[430px] md:h-[880px] md:max-h-[92vh] md:rounded-[2.5rem] md:border-4 md:border-navy-edge md:shadow-deck bg-navy-deep overflow-hidden flex flex-col" style="padding-top: env(safe-area-inset-top,0px); padding-bottom: env(safe-area-inset-bottom,0px);">
+
+    <!-- Top bar: chapter label, counter, progress dots -->
+    <header class="relative z-20 px-5 pt-5 pb-3 bg-navy-deep/95 backdrop-blur">
+      <div class="flex items-center justify-between mb-3">
+        <p id="chapterLabel" class="text-[11px] font-bold uppercase tracking-[0.2em] text-gold transition-colors duration-300">Micro-Module</p>
+        <p id="counterLabel" class="text-[11px] font-semibold uppercase tracking-widest text-ivory/50">Start</p>
+      </div>
+      <div id="dots" class="flex items-center gap-1.5" role="tablist" aria-label="Lesson progress"></div>
+    </header>
+
+    <!-- Card track -->
+    <main id="track" class="deck-track relative flex-1 flex overflow-x-auto overflow-y-hidden" tabindex="0" aria-label="Body language lesson cards, swipe to navigate">
+
+      <!-- COVER -->
+      <section class="deck-card w-full min-w-full h-full flex flex-col justify-center px-7 py-8 bg-gradient-to-b from-navy-deep via-navy to-navy-card" data-title="Welcome">
+        <p class="text-[11px] font-bold uppercase tracking-[0.3em] text-gold mb-6">SIL Micro-Learning Module</p>
+        <h1 class="text-4xl font-extrabold leading-tight mb-5 text-ivory">Mastering<br>Body Language</h1>
+        <p class="text-base text-ivory/70 leading-relaxed mb-10 max-w-xs">A self-paced micro-module on posture, presence, and cross-cultural awareness in professional communication.</p>
+        <div class="flex items-center gap-2 text-gold font-semibold text-sm">
+          <span>Swipe to begin</span>
+          <svg class="w-5 h-5 animate-pulse" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3"/></svg>
+        </div>
+        <p class="absolute bottom-8 left-7 right-7 text-[11px] text-ivory/30 tracking-wide">9 lessons · 2 parts · ~4 min</p>
+      </section>
+
+      <!-- CARD 1: Introduction -->
+      <section class="deck-card w-full min-w-full h-full flex flex-col px-6 pt-4 pb-8 overflow-y-auto" data-title="Introduction" data-chapter="0">
+        <div class="rounded-2xl overflow-hidden border border-navy-edge shadow-lg mb-6 aspect-[16/10] bg-navy-card">
+          <img src="images/Image_1_Posture_and_Confidence.png" alt="A professional sits confidently at her welcoming, well-lit office desk." class="w-full h-full object-cover" loading="eager">
+        </div>
+        <p class="chapter-tag text-[11px] font-bold uppercase tracking-[0.2em] text-gold mb-2">Part 1 · Fundamentals</p>
+        <h2 class="text-2xl font-extrabold text-ivory mb-4">Introduction</h2>
+        <p class="text-[15px] leading-relaxed text-ivory/80">Effective communicators adapt their body language to build understanding. Awareness of cultural differences in body language demonstrates respect, strengthens relationships, and helps prevent unintended misunderstandings.</p>
+      </section>
+
+      <!-- CARD 2: Physical Posture -->
+      <section class="deck-card w-full min-w-full h-full flex flex-col px-6 pt-4 pb-8 overflow-y-auto" data-title="Physical Posture" data-chapter="0">
+        <div class="rounded-2xl overflow-hidden border border-navy-edge shadow-lg mb-6 aspect-[16/10] bg-navy-card">
+          <img src="images/Image_2a_Gestures_and_Meaning.png" alt="Callouts showing: face the speaker, maintain open posture, avoid crossed arms." class="w-full h-full object-cover" loading="lazy">
+        </div>
+        <p class="chapter-tag text-[11px] font-bold uppercase tracking-[0.2em] text-gold mb-2">Part 1 · Fundamentals</p>
+        <h2 class="text-2xl font-extrabold text-ivory mb-1">Physical Posture</h2>
+        <p class="text-xs text-ivory/40 mb-4">How you carry your body</p>
+        <ul class="space-y-3 text-[15px] leading-relaxed text-ivory/80">
+          <li class="flex gap-3"><span class="text-gold mt-0.5">●</span><span>Face the speaker and give them your full attention.</span></li>
+          <li class="flex gap-3"><span class="text-gold mt-0.5">●</span><span>Stand or sit with an open, upright posture to project confidence.</span></li>
+          <li class="flex gap-3"><span class="text-gold mt-0.5">●</span><span>Avoid closed-off behaviors such as crossed arms, slouching, or looking down.</span></li>
+          <li class="flex gap-3"><span class="text-gold mt-0.5">●</span><span>Invite participation through an open posture and welcoming orientation toward others.</span></li>
+        </ul>
+      </section>
+
+      <!-- CARD 3: Physical Distance -->
+      <section class="deck-card w-full min-w-full h-full flex flex-col px-6 pt-4 pb-8 overflow-y-auto" data-title="Physical Distance" data-chapter="0">
+        <div class="rounded-2xl overflow-hidden border border-navy-edge shadow-lg mb-6 aspect-[16/10] bg-navy-card">
+          <img src="images/Image_3_Responsive_Communication.png" alt="Two colleagues talking; callouts read respect personal space, lean forward to listen, adapt to others' comfort." class="w-full h-full object-cover" loading="lazy">
+        </div>
+        <p class="chapter-tag text-[11px] font-bold uppercase tracking-[0.2em] text-gold mb-2">Part 1 · Fundamentals</p>
+        <h2 class="text-2xl font-extrabold text-ivory mb-1">Physical Distance</h2>
+        <p class="text-xs text-ivory/40 mb-4">How you position yourself in relation to others</p>
+        <ul class="space-y-3 text-[15px] leading-relaxed text-ivory/80">
+          <li class="flex gap-3"><span class="text-gold mt-0.5">●</span><span>Respect personal space while remaining approachable.</span></li>
+          <li class="flex gap-3"><span class="text-gold mt-0.5">●</span><span>Lean slightly forward to signal interest and engagement while listening.</span></li>
+          <li class="flex gap-3"><span class="text-gold mt-0.5">●</span><span>Adapt your position and proximity to help others feel comfortable and included.</span></li>
+        </ul>
+      </section>
+
+      <!-- CARD 4: Facial Expression -->
+      <section class="deck-card w-full min-w-full h-full flex flex-col px-6 pt-4 pb-8 overflow-y-auto" data-title="Facial Expression" data-chapter="0">
+        <div class="rounded-2xl overflow-hidden border border-navy-edge shadow-lg mb-6 aspect-[16/10] bg-navy-card">
+          <img src="images/Image_4_Facial_Expression.png" alt="A smiling professional; callouts read maintain eye contact, nod, smile, match emotional tone." class="w-full h-full object-cover" loading="lazy">
+        </div>
+        <p class="chapter-tag text-[11px] font-bold uppercase tracking-[0.2em] text-gold mb-2">Part 1 · Fundamentals</p>
+        <h2 class="text-2xl font-extrabold text-ivory mb-1">Facial Expression</h2>
+        <p class="text-xs text-ivory/40 mb-4">What your face communicates</p>
+        <ul class="space-y-3 text-[15px] leading-relaxed text-ivory/80">
+          <li class="flex gap-3"><span class="text-gold mt-0.5">●</span><span>Maintain appropriate eye contact to communicate honesty and attentiveness.</span></li>
+          <li class="flex gap-3"><span class="text-gold mt-0.5">●</span><span>Nod occasionally and use appropriate facial expressions to show understanding.</span></li>
+          <li class="flex gap-3"><span class="text-gold mt-0.5">●</span><span>Smile genuinely when appropriate to create a welcoming atmosphere.</span></li>
+          <li class="flex gap-3"><span class="text-gold mt-0.5">●</span><span>Match your facial expressions to the emotional tone of the conversation.</span></li>
+        </ul>
+      </section>
+
+      <!-- CARD 5: Demeanor -->
+      <section class="deck-card w-full min-w-full h-full flex flex-col px-6 pt-4 pb-8 overflow-y-auto" data-title="Demeanor" data-chapter="0">
+        <div class="rounded-2xl overflow-hidden border border-navy-edge shadow-lg mb-6 aspect-[16/10] bg-navy-card">
+          <img src="images/Image_5_Demeanor.png" alt="A professional gesturing openly; callouts read match tone with body, avoid distracted behaviors, stay calm, use natural gestures." class="w-full h-full object-cover" loading="lazy">
+        </div>
+        <p class="chapter-tag text-[11px] font-bold uppercase tracking-[0.2em] text-gold mb-2">Part 1 · Fundamentals</p>
+        <h2 class="text-2xl font-extrabold text-ivory mb-1">Demeanor</h2>
+        <p class="text-xs text-ivory/40 mb-4">The attitude and emotional tone you project</p>
+        <ul class="space-y-3 text-[15px] leading-relaxed text-ivory/80">
+          <li class="flex gap-3"><span class="text-gold mt-0.5">●</span><span>Ensure your body language matches the tone of the words you are saying.</span></li>
+          <li class="flex gap-3"><span class="text-gold mt-0.5">●</span><span>Show respect by avoiding behaviors that suggest impatience or distraction.</span></li>
+          <li class="flex gap-3"><span class="text-gold mt-0.5">●</span><span>Maintain a calm, steady presence, especially during difficult conversations.</span></li>
+          <li class="flex gap-3"><span class="text-gold mt-0.5">●</span><span>Use natural, purposeful hand gestures to reinforce important ideas.</span></li>
+        </ul>
+      </section>
+
+      <!-- CARD 6: Cultural Awareness intro -->
+      <section class="deck-card chapter-2 w-full min-w-full h-full flex flex-col px-6 pt-4 pb-8 overflow-y-auto bg-gradient-to-b from-navy-deep to-[#0F2A2A]" data-title="Cultural Awareness" data-chapter="1">
+        <div class="rounded-2xl overflow-hidden border border-navy-edge shadow-lg mb-6 aspect-[16/10] bg-navy-card">
+          <img src="images/Image_6_Cultural_Differences.png" alt="A professional with globe and network icons; callouts read recognize cultural differences, avoid assuming universal rules, observe adapt and ask." class="w-full h-full object-cover" loading="lazy">
+        </div>
+        <p class="chapter-tag text-[11px] font-bold uppercase tracking-[0.2em] text-teal mb-2">Part 2 · Cultural Awareness</p>
+        <h2 class="text-2xl font-extrabold text-ivory mb-4">Reading the Room, Across Cultures</h2>
+        <p class="text-[15px] leading-relaxed text-ivory/80">Be aware of cultural differences in gestures, eye contact, personal space, and levels of formality. The following points describe general cultural tendencies, not universal rules. Individual preferences, regional customs, and organizational culture should always be considered. When in doubt, observe first, adapt respectfully, and ask questions when appropriate.</p>
+      </section>
+
+      <!-- CARD 7: Formal vs Informal Posture -->
+      <section class="deck-card chapter-2 w-full min-w-full h-full flex flex-col px-6 pt-4 pb-8 overflow-y-auto bg-[#0F2A2A]" data-title="Formal vs. Informal" data-chapter="1">
+        <div class="rounded-2xl overflow-hidden border border-navy-edge shadow-lg mb-6 aspect-[16/10] bg-navy-card">
+          <img src="images/Image_7_Formal_vs_Informal_Posture.png" alt="Diagram comparing relaxed Western posture to formal Eastern posture." class="w-full h-full object-cover" loading="lazy">
+        </div>
+        <p class="chapter-tag text-[11px] font-bold uppercase tracking-[0.2em] text-teal mb-2">Part 2 · Cultural Awareness</p>
+        <h2 class="text-2xl font-extrabold text-ivory mb-4">Formal vs. Informal Posture</h2>
+        <ul class="space-y-3 text-[15px] leading-relaxed text-ivory/80">
+          <li class="flex gap-3"><span class="text-teal mt-0.5">●</span><span>Western workplaces often encourage relaxed but attentive posture and expressive gestures.</span></li>
+          <li class="flex gap-3"><span class="text-teal mt-0.5">●</span><span>Many Eastern cultures place greater emphasis on formal posture, controlled movements, and showing respect through physical demeanor.</span></li>
+          <li class="flex gap-3"><span class="text-teal mt-0.5">●</span><span>When in doubt, begin with a more formal posture and adjust as you observe the communication style of those around you.</span></li>
+        </ul>
+      </section>
+
+      <!-- CARD 8: Personal Distance -->
+      <section class="deck-card chapter-2 w-full min-w-full h-full flex flex-col px-6 pt-4 pb-8 overflow-y-auto bg-[#0F2A2A]" data-title="Personal Distance" data-chapter="1">
+        <div class="rounded-2xl overflow-hidden border border-navy-edge shadow-lg mb-6 aspect-[16/10] bg-navy-card">
+          <img src="images/Image_8_Personal_Distance.png" alt="Diagram comparing wider Western personal distance to closer Eastern proximity." class="w-full h-full object-cover" loading="lazy">
+        </div>
+        <p class="chapter-tag text-[11px] font-bold uppercase tracking-[0.2em] text-teal mb-2">Part 2 · Cultural Awareness</p>
+        <h2 class="text-2xl font-extrabold text-ivory mb-4">Personal Distance</h2>
+        <ul class="space-y-3 text-[15px] leading-relaxed text-ivory/80">
+          <li class="flex gap-3"><span class="text-teal mt-0.5">●</span><span>Many Western cultures (North America, Northern Europe) generally prefer more personal space during conversation.</span></li>
+          <li class="flex gap-3"><span class="text-teal mt-0.5">●</span><span>Many Eastern cultures are often more comfortable standing closer to people they know well, though preferences vary widely by country and context.</span></li>
+          <li class="flex gap-3"><span class="text-teal mt-0.5">●</span><span>Observe and adapt to the other person's comfort level rather than assuming your own preference is universal.</span></li>
+        </ul>
+      </section>
+
+      <!-- CARD 9: Eye Contact -->
+      <section class="deck-card chapter-2 w-full min-w-full h-full flex flex-col px-6 pt-4 pb-8 overflow-y-auto bg-[#0F2A2A]" data-title="Eye Contact" data-chapter="1">
+        <div class="rounded-2xl overflow-hidden border border-navy-edge shadow-lg mb-6 aspect-[16/10] bg-navy-card">
+          <img src="images/Image_9_Cultural_Eye_Contact.png" alt="Two colleagues in conversation; callouts contrast direct Western eye contact with respectful Eastern norms." class="w-full h-full object-cover" loading="lazy">
+        </div>
+        <p class="chapter-tag text-[11px] font-bold uppercase tracking-[0.2em] text-teal mb-2">Part 2 · Cultural Awareness</p>
+        <h2 class="text-2xl font-extrabold text-ivory mb-4">Eye Contact</h2>
+        <ul class="space-y-3 text-[15px] leading-relaxed text-ivory/80">
+          <li class="flex gap-3"><span class="text-teal mt-0.5">●</span><span>Many Western cultures view direct eye contact as a sign of confidence, honesty, and engagement.</span></li>
+          <li class="flex gap-3"><span class="text-teal mt-0.5">●</span><span>In some Eastern cultures, prolonged eye contact — particularly with elders or authority figures — may be viewed as disrespectful or confrontational.</span></li>
+          <li class="flex gap-3"><span class="text-teal mt-0.5">●</span><span>Aim for comfortable, respectful eye contact while remaining sensitive to cultural expectations.</span></li>
+        </ul>
+      </section>
+
+      <!-- CLOSING -->
+      <section class="deck-card w-full min-w-full h-full flex flex-col justify-center px-7 py-8 bg-gradient-to-b from-[#0F2A2A] via-navy to-navy-deep" data-title="Complete">
+        <div class="rounded-2xl overflow-hidden border border-navy-edge shadow-lg mb-6 aspect-[16/10] bg-navy-card">
+          <img src="images/Image_1a_Posture_and_Confidence.png" alt="Two colleagues shaking hands warmly, representing cultural awareness in the workplace." class="w-full h-full object-cover" loading="lazy">
+        </div>
+        <p class="text-[11px] font-bold uppercase tracking-[0.3em] text-gold mb-3">Module Complete</p>
+        <h2 class="text-2xl font-extrabold text-ivory mb-5">Key Takeaways</h2>
+        <ul class="space-y-3 text-[15px] leading-relaxed text-ivory/80 mb-8">
+          <li class="flex gap-3"><span class="text-gold mt-0.5">✓</span><span>Open posture, respectful distance, and warm facial expression build trust before you say a word.</span></li>
+          <li class="flex gap-3"><span class="text-gold mt-0.5">✓</span><span>Your demeanor should match your message — calm, steady presence matters most in difficult moments.</span></li>
+          <li class="flex gap-3"><span class="text-gold mt-0.5">✓</span><span>Cultural norms around formality, distance, and eye contact vary — these are tendencies, not rules.</span></li>
+          <li class="flex gap-3"><span class="text-gold mt-0.5">✓</span><span>When uncertain: observe first, adapt respectfully, and ask questions.</span></li>
+        </ul>
+        <p class="text-[11px] text-ivory/30 tracking-wide">SIL Micro-Learning Module · Body Language</p>
+      </section>
+
+    </main>
+
+    <!-- Bottom nav -->
+    <footer class="relative z-20 px-5 py-4 bg-navy-deep/95 backdrop-blur flex items-center justify-between gap-4" style="padding-bottom: max(1rem, env(safe-area-inset-bottom,0px));">
+      <button id="prevBtn" type="button" class="btn-nav flex items-center justify-center w-12 h-12 rounded-full border border-navy-edge text-ivory active:scale-95 transition" aria-label="Previous card">
+        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5"/></svg>
+      </button>
+      <p id="cardTitleLabel" class="flex-1 text-center text-sm font-semibold text-ivory/90 truncate">Welcome</p>
+      <button id="nextBtn" type="button" class="btn-nav flex items-center justify-center w-12 h-12 rounded-full bg-gold text-navy-deep active:scale-95 transition" aria-label="Next card">
+        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5"/></svg>
+      </button>
+    </footer>
+
+  </div>
+</div>
+
+<script>
+  const track = document.getElementById('track');
+  const cards = Array.from(track.children);
+  const dotsWrap = document.getElementById('dots');
+  const counterLabel = document.getElementById('counterLabel');
+  const chapterLabel = document.getElementById('chapterLabel');
+  const cardTitleLabel = document.getElementById('cardTitleLabel');
+  const prevBtn = document.getElementById('prevBtn');
+  const nextBtn = document.getElementById('nextBtn');
+
+  const total = cards.length; // 11: cover + 9 + closing
+  const contentStart = 1, contentEnd = 9; // indices 1..9 are the 9 numbered lessons
+
+  cards.forEach((_, i) => {
+    const dot = document.createElement('button');
+    dot.type = 'button';
+    dot.className = 'dot-btn h-1.5 rounded-full bg-ivory/20';
+    dot.style.width = (i === 0 || i === total - 1) ? '6px' : '18px';
+    dot.setAttribute('role', 'tab');
+    dot.setAttribute('aria-label', 'Go to ' + (cards[i].dataset.title || 'card ' + (i + 1)));
+    dot.addEventListener('click', () => goTo(i));
+    dotsWrap.appendChild(dot);
+  });
+  const dots = Array.from(dotsWrap.children);
+
+  let current = 0;
+
+  function goTo(i) {
+    i = Math.max(0, Math.min(total - 1, i));
+    cards[i].scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+  }
+
+  function update(i) {
+    current = i;
+    dots.forEach((d, idx) => {
+      const active = idx === i;
+      d.style.backgroundColor = active ? '#E3B23C' : 'rgba(240,235,221,0.2)';
+      d.style.width = active ? '26px' : ((idx === 0 || idx === total - 1) ? '6px' : '18px');
+      d.setAttribute('aria-selected', active ? 'true' : 'false');
+    });
+
+    const title = cards[i].dataset.title || '';
+    cardTitleLabel.textContent = title;
+
+    if (i === 0) { counterLabel.textContent = 'Start'; }
+    else if (i === total - 1) { counterLabel.textContent = 'Complete'; }
+    else { counterLabel.textContent = 'Card ' + i + ' / ' + (contentEnd - contentStart + 1); }
+
+    const chapter = cards[i].dataset.chapter;
+    if (chapter === '1') { chapterLabel.textContent = 'Part 2 · Cultural Awareness'; chapterLabel.classList.add('text-teal'); chapterLabel.classList.remove('text-gold'); }
+    else if (chapter === '0') { chapterLabel.textContent = 'Part 1 · Fundamentals'; chapterLabel.classList.add('text-gold'); chapterLabel.classList.remove('text-teal'); }
+    else { chapterLabel.textContent = i === 0 ? 'SIL Micro-Learning Module' : 'Body Language'; chapterLabel.classList.add('text-gold'); chapterLabel.classList.remove('text-teal'); }
+
+    prevBtn.disabled = i === 0;
+    nextBtn.setAttribute('aria-label', i === total - 1 ? 'Restart' : 'Next card');
+    nextBtn.innerHTML = i === total - 1
+      ? '<svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99"/></svg>'
+      : '<svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5"/></svg>';
+  }
+
+  prevBtn.addEventListener('click', () => goTo(current - 1));
+  nextBtn.addEventListener('click', () => goTo(current === total - 1 ? 0 : current + 1));
+
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting && entry.intersectionRatio > 0.6) {
+        update(cards.indexOf(entry.target));
+      }
+    });
+  }, { root: track, threshold: [0.6] });
+  cards.forEach((c) => io.observe(c));
+
+  track.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight') goTo(current + 1);
+    if (e.key === 'ArrowLeft') goTo(current - 1);
+  });
+
+  update(0);
+</script>
+
+</body>
+</html>

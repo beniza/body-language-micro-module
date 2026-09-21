@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Mastering Body Language — A Field Guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,500;0,600;0,700;1,500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          parchment: '#FAF6EC',
+          parchment2: '#F3ECDD',
+          forest: '#2F5233',
+          forestdark: '#20392A',
+          rust: '#B5652E',
+          ink: '#2B2620',
+        },
+        fontFamily: {
+          serif: ['Lora', 'Georgia', 'serif'],
+          sans: ['Inter', 'system-ui', 'sans-serif'],
+        }
+      }
+    }
+  }
+</script>
+<style>
+  html { scroll-behavior: smooth; }
+  body {
+    background-color: #FAF6EC;
+    background-image:
+      radial-gradient(circle at 1px 1px, rgba(43,38,32,0.06) 1px, transparent 0);
+    background-size: 18px 18px;
+    color: #2B2620;
+  }
+  .paper-card {
+    background-color: #FFFDF8;
+    border: 1.5px dashed rgba(43,38,32,0.28);
+    box-shadow: 0 2px 0 rgba(43,38,32,0.04), 0 10px 24px -14px rgba(43,38,32,0.35);
+  }
+  .stamp {
+    transform: rotate(-6deg);
+    border: 2px solid currentColor;
+  }
+  .accordion-panel {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 380ms cubic-bezier(0.4,0,0.2,1);
+  }
+  .accordion-panel.open {
+    grid-template-rows: 1fr;
+  }
+  .accordion-panel > div {
+    overflow: hidden;
+    min-height: 0;
+  }
+  .chevron {
+    transition: transform 320ms cubic-bezier(0.4,0,0.2,1);
+  }
+  .open .chevron,
+  button[aria-expanded="true"] .chevron {
+    transform: rotate(180deg);
+  }
+  .tab-pill {
+    transition: background-color 220ms ease, color 220ms ease, box-shadow 220ms ease;
+  }
+  .chapter-section {
+    display: none;
+  }
+  .chapter-section.active {
+    display: block;
+  }
+  .underline-swash {
+    background-image: linear-gradient(transparent 65%, rgba(181,101,46,0.35) 65%);
+    background-repeat: no-repeat;
+  }
+</style>
+</head>
+<body class="antialiased font-sans">
+
+  <!-- TITLE PAGE -->
+  <header class="relative overflow-hidden bg-forest text-parchment">
+    <div class="absolute inset-0 opacity-15" style="background-image: radial-gradient(circle at 2px 2px, #FAF6EC 1px, transparent 0); background-size: 22px 22px;"></div>
+    <div class="relative max-w-2xl mx-auto px-6 pt-14 pb-10 md:pt-20 md:pb-14">
+      <div class="flex items-center gap-2 mb-6">
+        <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" class="text-rust">
+          <circle cx="12" cy="12" r="9"/>
+          <path d="M15.5 8.5l-2 5-5 2 2-5 5-2z" fill="currentColor" stroke="none" opacity="0.9"/>
+          <circle cx="12" cy="12" r="1" fill="currentColor"/>
+        </svg>
+        <span class="uppercase tracking-[0.25em] text-xs font-semibold text-parchment/80">Field Guide No. 07</span>
+      </div>
+      <h1 class="font-serif font-700 text-4xl md:text-5xl leading-tight mb-4">
+        Mastering<br/>Body Language
+      </h1>
+      <p class="text-parchment/85 text-base md:text-lg leading-relaxed max-w-lg font-medium">
+        A self-paced micro-module on posture, presence, and cross-cultural awareness in professional communication.
+      </p>
+      <div class="mt-8 flex items-center gap-3 text-xs uppercase tracking-widest text-parchment/70">
+        <span class="h-px w-8 bg-parchment/40"></span>
+        SIL Micro-Learning Series
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-2xl mx-auto px-5 md:px-6">
+
+    <!-- INTRO -->
+    <section class="paper-card rounded-2xl px-6 py-7 -mt-8 md:-mt-10 relative z-10 mb-10">
+      <div class="flex items-start gap-4">
+        <svg class="shrink-0 text-forest mt-1" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+          <path d="M12 21c4-3.5 7-7.2 7-11a7 7 0 10-14 0c0 3.8 3 7.5 7 11z"/>
+          <circle cx="12" cy="10" r="2.4"/>
+        </svg>
+        <p class="text-ink/90 leading-relaxed text-[15px] md:text-base">
+          Effective communicators <span class="underline-swash font-semibold">adapt their body language</span> to build understanding. Awareness of cultural differences in body language demonstrates respect, strengthens relationships, and helps prevent unintended misunderstandings.
+        </p>
+      </div>
+    </section>
+
+    <!-- TAB CONTROL -->
+    <div class="sticky top-0 z-20 -mx-5 px-5 md:-mx-6 md:px-6 py-3 bg-parchment/95 backdrop-blur border-b border-ink/10 mb-8">
+      <div role="tablist" aria-label="Field guide chapters" class="grid grid-cols-2 gap-2 bg-parchment2 p-1.5 rounded-full border border-ink/10">
+        <button role="tab" id="tab-1" aria-controls="panel-1" aria-selected="true" data-tab="1"
+          class="tab-btn tab-pill rounded-full py-2.5 px-2 text-[13px] md:text-sm font-semibold bg-forest text-parchment shadow-sm">
+          Chapter 1 · Fundamentals
+        </button>
+        <button role="tab" id="tab-2" aria-controls="panel-2" aria-selected="false" data-tab="2"
+          class="tab-btn tab-pill rounded-full py-2.5 px-2 text-[13px] md:text-sm font-semibold text-ink/70">
+          Chapter 2 · Cultural Awareness
+        </button>
+      </div>
+    </div>
+
+    <!-- CHAPTER 1 -->
+    <section id="panel-1" role="tabpanel" aria-labelledby="tab-1" class="chapter-section active">
+      <div class="flex items-center gap-3 mb-6">
+        <span class="stamp text-forest rounded-full h-11 w-11 flex items-center justify-center font-serif font-bold text-sm shrink-0">Ch.1</span>
+        <div>
+          <h2 class="font-serif font-bold text-xl md:text-2xl text-forestdark leading-snug">Fundamentals</h2>
+          <p class="text-xs uppercase tracking-widest text-ink/50">The building blocks of presence</p>
+        </div>
+      </div>
+
+      <div class="grid md:grid-cols-2 gap-5 md:gap-6">
+        <!-- Entry 01 -->
+        <article class="paper-card rounded-2xl overflow-hidden">
+          <h3>
+            <button class="accordion-toggle w-full flex items-center gap-3 text-left px-5 py-4 min-h-[48px]" aria-expanded="true" aria-controls="acc-1" data-badge="01">
+              <span class="stamp text-rust rounded-full h-10 w-10 flex items-center justify-center font-serif font-bold text-xs shrink-0">01</span>
+              <span class="flex-1">
+                <span class="block font-serif font-semibold text-lg text-ink">Physical Posture</span>
+                <span class="block text-xs text-ink/55">How you carry your body</span>
+              </span>
+              <svg class="chevron shrink-0 text-forest" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+            </button>
+          </h3>
+          <div id="acc-1" class="accordion-panel open">
+            <div>
+              <div class="px-5 pb-5">
+                <div class="rounded-lg overflow-hidden border border-ink/10 mb-4 aspect-[16/10]">
+                  <img src="images/Image_2a_Gestures_and_Meaning.png" alt="Illustration of a professional facing a colleague with open posture, avoiding crossed arms" class="w-full h-full object-cover" loading="lazy">
+                </div>
+                <ul class="space-y-2.5 text-[15px] text-ink/85 leading-relaxed">
+                  <li class="flex gap-2"><span class="text-rust mt-1">◆</span><span>Face the speaker and give them your full attention.</span></li>
+                  <li class="flex gap-2"><span class="text-rust mt-1">◆</span><span>Stand or sit with an open, upright posture to project confidence.</span></li>
+                  <li class="flex gap-2"><span class="text-rust mt-1">◆</span><span>Avoid closed-off behaviors such as crossed arms, slouching, or looking down.</span></li>
+                  <li class="flex gap-2"><span class="text-rust mt-1">◆</span><span>Invite participation through an open posture and welcoming orientation toward others.</span></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Entry 02 -->
+        <article class="paper-card rounded-2xl overflow-hidden">
+          <h3>
+            <button class="accordion-toggle w-full flex items-center gap-3 text-left px-5 py-4 min-h-[48px]" aria-expanded="false" aria-controls="acc-2">
+              <span class="stamp text-rust rounded-full h-10 w-10 flex items-center justify-center font-serif font-bold text-xs shrink-0">02</span>
+              <span class="flex-1">
+                <span class="block font-serif font-semibold text-lg text-ink">Physical Distance</span>
+                <span class="block text-xs text-ink/55">How you position yourself</span>
+              </span>
+              <svg class="chevron shrink-0 text-forest" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+            </button>
+          </h3>
+          <div id="acc-2" class="accordion-panel">
+            <div>
+              <div class="px-5 pb-5">
+                <div class="rounded-lg overflow-hidden border border-ink/10 mb-4 aspect-[16/10]">
+                  <img src="images/Image_3_Responsive_Communication.png" alt="Illustration of two colleagues in conversation, one leaning forward to listen" class="w-full h-full object-cover" loading="lazy">
+                </div>
+                <ul class="space-y-2.5 text-[15px] text-ink/85 leading-relaxed">
+                  <li class="flex gap-2"><span class="text-rust mt-1">◆</span><span>Respect personal space while remaining approachable.</span></li>
+                  <li class="flex gap-2"><span class="text-rust mt-1">◆</span><span>Lean slightly forward to signal interest and engagement while listening.</span></li>
+                  <li class="flex gap-2"><span class="text-rust mt-1">◆</span><span>Adapt your position and proximity to help others feel comfortable and included.</span></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Entry 03 -->
+        <article class="paper-card rounded-2xl overflow-hidden">
+          <h3>
+            <button class="accordion-toggle w-full flex items-center gap-3 text-left px-5 py-4 min-h-[48px]" aria-expanded="false" aria-controls="acc-3">
+              <span class="stamp text-rust rounded-full h-10 w-10 flex items-center justify-center font-serif font-bold text-xs shrink-0">03</span>
+              <span class="flex-1">
+                <span class="block font-serif font-semibold text-lg text-ink">Facial Expression</span>
+                <span class="block text-xs text-ink/55">What your face communicates</span>
+              </span>
+              <svg class="chevron shrink-0 text-forest" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+            </button>
+          </h3>
+          <div id="acc-3" class="accordion-panel">
+            <div>
+              <div class="px-5 pb-5">
+                <div class="rounded-lg overflow-hidden border border-ink/10 mb-4 aspect-[16/10]">
+                  <img src="images/Image_4_Facial_Expression.png" alt="Illustration highlighting eye contact, nodding, smiling, and matching emotional tone" class="w-full h-full object-cover" loading="lazy">
+                </div>
+                <ul class="space-y-2.5 text-[15px] text-ink/85 leading-relaxed">
+                  <li class="flex gap-2"><span class="text-rust mt-1">◆</span><span>Maintain appropriate eye contact to communicate honesty and attentiveness.</span></li>
+                  <li class="flex gap-2"><span class="text-rust mt-1">◆</span><span>Nod occasionally and use appropriate facial expressions to show understanding.</span></li>
+                  <li class="flex gap-2"><span class="text-rust mt-1">◆</span><span>Smile genuinely when appropriate to create a welcoming atmosphere.</span></li>
+                  <li class="flex gap-2"><span class="text-rust mt-1">◆</span><span>Match your facial expressions to the emotional tone of the conversation.</span></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Entry 04 -->
+        <article class="paper-card rounded-2xl overflow-hidden">
+          <h3>
+            <button class="accordion-toggle w-full flex items-center gap-3 text-left px-5 py-4 min-h-[48px]" aria-expanded="false" aria-controls="acc-4">
+              <span class="stamp text-rust rounded-full h-10 w-10 flex items-center justify-center font-serif font-bold text-xs shrink-0">04</span>
+              <span class="flex-1">
+                <span class="block font-serif font-semibold text-lg text-ink">Demeanor</span>
+                <span class="block text-xs text-ink/55">The attitude you project</span>
+              </span>
+              <svg class="chevron shrink-0 text-forest" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+            </button>
+          </h3>
+          <div id="acc-4" class="accordion-panel">
+            <div>
+              <div class="px-5 pb-5">
+                <div class="rounded-lg overflow-hidden border border-ink/10 mb-4 aspect-[16/10]">
+                  <img src="images/Image_5_Demeanor.png" alt="Illustration showing calm demeanor, natural hand gestures, and matched tone" class="w-full h-full object-cover" loading="lazy">
+                </div>
+                <ul class="space-y-2.5 text-[15px] text-ink/85 leading-relaxed">
+                  <li class="flex gap-2"><span class="text-rust mt-1">◆</span><span>Ensure your body language matches the tone of the words you are saying.</span></li>
+                  <li class="flex gap-2"><span class="text-rust mt-1">◆</span><span>Show respect by avoiding behaviors that suggest impatience or distraction.</span></li>
+                  <li class="flex gap-2"><span class="text-rust mt-1">◆</span><span>Maintain a calm, steady presence, especially during difficult conversations.</span></li>
+                  <li class="flex gap-2"><span class="text-rust mt-1">◆</span><span>Use natural, purposeful hand gestures to reinforce important ideas.</span></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </article>
+      </div>
+
+      <button data-goto="2" class="mt-8 w-full flex items-center justify-center gap-2 bg-forest text-parchment rounded-full py-3.5 font-semibold text-sm shadow-sm active:scale-[0.98] transition">
+        Continue to Chapter 2
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </button>
+    </section>
+
+    <!-- CHAPTER 2 -->
+    <section id="panel-2" role="tabpanel" aria-labelledby="tab-2" class="chapter-section">
+      <div class="flex items-center gap-3 mb-4">
+        <span class="stamp text-forest rounded-full h-11 w-11 flex items-center justify-center font-serif font-bold text-sm shrink-0">Ch.2</span>
+        <div>
+          <h2 class="font-serif font-bold text-xl md:text-2xl text-forestdark leading-snug">Cultural Awareness</h2>
+          <p class="text-xs uppercase tracking-widest text-ink/50">Reading the room, wherever you are</p>
+        </div>
+      </div>
+
+      <div class="paper-card rounded-2xl overflow-hidden mb-6">
+        <div class="aspect-[16/9]">
+          <img src="images/Image_6_Cultural_Differences.png" alt="Illustration of cultural differences: recognize differences, avoid assuming universal rules, observe adapt and ask" class="w-full h-full object-cover" loading="lazy">
+        </div>
+        <p class="px-6 py-5 text-[15px] text-ink/85 leading-relaxed">
+          Be aware of cultural differences in gestures, eye contact, personal space, and levels of formality. The following points describe <span class="underline-swash font-semibold">general cultural tendencies, not universal rules</span>. Individual preferences, regional customs, and organizational culture should always be considered. When in doubt, observe first, adapt respectfully, and ask questions when appropriate.
+        </p>
+      </div>
+
+      <div class="grid md:grid-cols-2 gap-5 md:gap-6">
+        <!-- Entry 05 -->
+        <article class="paper-card rounded-2xl overflow-hidden">
+          <h3>
+            <button class="accordion-toggle w-full flex items-center gap-3 text-left px-5 py-4 min-h-[48px]" aria-expanded="true" aria-controls="acc-5">
+              <span class="stamp text-rust rounded-full h-10 w-10 flex items-center justify-center font-serif font-bold text-xs shrink-0">05</span>
+              <span class="flex-1">
+                <span class="block font-serif font-semibold text-lg text-ink">Formal vs. Informal Posture</span>
+              </span>
+              <svg class="chevron shrink-0 text-forest" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+            </button>
+          </h3>
+          <div id="acc-5" class="accordion-panel open">
+            <div>
+              <div class="px-5 pb-5">
+                <div class="rounded-lg overflow-hidden border border-ink/10 mb-4 aspect-[16/10]">
+                  <img src="images/Image_7_Formal_vs_Informal_Posture.png" alt="Illustration comparing relaxed Western posture with formal, controlled Eastern posture" class="w-full h-full object-cover" loading="lazy">
+                </div>
+                <ul class="space-y-2.5 text-[15px] text-ink/85 leading-relaxed">
+                  <li class="flex gap-2"><span class="text-rust mt-1">◆</span><span>Western workplaces often encourage relaxed but attentive posture and expressive gestures.</span></li>
+                  <li class="flex gap-2"><span class="text-rust mt-1">◆</span><span>Many Eastern cultures place greater emphasis on formal posture, controlled movements, and showing respect through physical demeanor.</span></li>
+                  <li class="flex gap-2"><span class="text-rust mt-1">◆</span><span>When in doubt, begin with a more formal posture and adjust as you observe the communication style of those around you.</span></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Entry 06 -->
+        <article class="paper-card rounded-2xl overflow-hidden">
+          <h3>
+            <button class="accordion-toggle w-full flex items-center gap-3 text-left px-5 py-4 min-h-[48px]" aria-expanded="false" aria-controls="acc-6">
+              <span class="stamp text-rust rounded-full h-10 w-10 flex items-center justify-center font-serif font-bold text-xs shrink-0">06</span>
+              <span class="flex-1">
+                <span class="block font-serif font-semibold text-lg text-ink">Personal Distance</span>
+              </span>
+              <svg class="chevron shrink-0 text-forest" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+            </button>
+          </h3>
+          <div id="acc-6" class="accordion-panel">
+            <div>
+              <div class="px-5 pb-5">
+                <div class="rounded-lg overflow-hidden border border-ink/10 mb-4 aspect-[16/10]">
+                  <img src="images/Image_8_Personal_Distance.png" alt="Illustration comparing Western preference for personal space with closer Eastern proximity norms" class="w-full h-full object-cover" loading="lazy">
+                </div>
+                <ul class="space-y-2.5 text-[15px] text-ink/85 leading-relaxed">
+                  <li class="flex gap-2"><span class="text-rust mt-1">◆</span><span>Many Western cultures (North America, Northern Europe) generally prefer more personal space during conversation.</span></li>
+                  <li class="flex gap-2"><span class="text-rust mt-1">◆</span><span>Many Eastern cultures are often more comfortable standing closer to people they know well, though preferences vary widely by country and context.</span></li>
+                  <li class="flex gap-2"><span class="text-rust mt-1">◆</span><span>Observe and adapt to the other person's comfort level rather than assuming your own preference is universal.</span></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Entry 07 -->
+        <article class="paper-card rounded-2xl overflow-hidden md:col-span-2">
+          <h3>
+            <button class="accordion-toggle w-full flex items-center gap-3 text-left px-5 py-4 min-h-[48px]" aria-expanded="false" aria-controls="acc-7">
+              <span class="stamp text-rust rounded-full h-10 w-10 flex items-center justify-center font-serif font-bold text-xs shrink-0">07</span>
+              <span class="flex-1">
+                <span class="block font-serif font-semibold text-lg text-ink">Eye Contact</span>
+              </span>
+              <svg class="chevron shrink-0 text-forest" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+            </button>
+          </h3>
+          <div id="acc-7" class="accordion-panel">
+            <div>
+              <div class="px-5 pb-5 md:grid md:grid-cols-2 md:gap-5">
+                <div class="rounded-lg overflow-hidden border border-ink/10 mb-4 md:mb-0 aspect-[16/10]">
+                  <img src="images/Image_9_Cultural_Eye_Contact.png" alt="Illustration comparing direct Western eye contact with more reserved Eastern eye contact norms" class="w-full h-full object-cover" loading="lazy">
+                </div>
+                <ul class="space-y-2.5 text-[15px] text-ink/85 leading-relaxed self-center">
+                  <li class="flex gap-2"><span class="text-rust mt-1">◆</span><span>Many Western cultures view direct eye contact as a sign of confidence, honesty, and engagement.</span></li>
+                  <li class="flex gap-2"><span class="text-rust mt-1">◆</span><span>In some Eastern cultures, prolonged eye contact — particularly with elders or authority figures — may be viewed as disrespectful or confrontational.</span></li>
+                  <li class="flex gap-2"><span class="text-rust mt-1">◆</span><span>Aim for comfortable, respectful eye contact while remaining sensitive to cultural expectations.</span></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </article>
+      </div>
+
+      <!-- SUMMARY -->
+      <div class="mt-10 rounded-2xl bg-forestdark text-parchment overflow-hidden">
+        <div class="aspect-[16/9]">
+          <img src="images/Image_1a_Posture_and_Confidence.png" alt="Illustration of a warm professional handshake representing cultural awareness in the workplace" class="w-full h-full object-cover" loading="lazy">
+        </div>
+        <div class="px-6 py-6">
+          <div class="flex items-center gap-2 mb-4">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" class="text-rust"><path d="M12 3l2.2 4.9 5.4.6-4 3.7 1.1 5.3L12 14.9 7.3 17.5l1.1-5.3-4-3.7 5.4-.6L12 3z"/></svg>
+            <h3 class="font-serif font-bold text-lg">Field Guide Summary</h3>
+          </div>
+          <ul class="space-y-3 text-[15px] leading-relaxed text-parchment/90">
+            <li class="flex gap-2"><span class="text-rust mt-0.5">✓</span><span>Open, upright posture and full attention toward the speaker build immediate trust.</span></li>
+            <li class="flex gap-2"><span class="text-rust mt-0.5">✓</span><span>Respectful distance and a slight forward lean signal engagement without crowding.</span></li>
+            <li class="flex gap-2"><span class="text-rust mt-0.5">✓</span><span>Eye contact, nods, and genuine smiles should match the emotional tone of the moment.</span></li>
+            <li class="flex gap-2"><span class="text-rust mt-0.5">✓</span><span>A calm, steady demeanor communicates respect — especially in difficult conversations.</span></li>
+            <li class="flex gap-2"><span class="text-rust mt-0.5">✓</span><span>Cultural norms around formality, space, and eye contact vary — observe first, then adapt respectfully.</span></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <footer class="text-center py-10 mt-4">
+      <p class="text-xs uppercase tracking-[0.2em] text-ink/45">SIL Micro-Learning Module · Body Language</p>
+    </footer>
+  </main>
+
+<script>
+  // Tab switching
+  var tabs = document.querySelectorAll('.tab-btn');
+  var panels = { '1': document.getElementById('panel-1'), '2': document.getElementById('panel-2') };
+
+  function activateTab(id) {
+    tabs.forEach(function (btn) {
+      var isActive = btn.dataset.tab === id;
+      btn.setAttribute('aria-selected', isActive ? 'true' : 'false');
+      btn.classList.toggle('bg-forest', isActive);
+      btn.classList.toggle('text-parchment', isActive);
+      btn.classList.toggle('shadow-sm', isActive);
+      btn.classList.toggle('text-ink/70', !isActive);
+    });
+    Object.keys(panels).forEach(function (key) {
+      panels[key].classList.toggle('active', key === id);
+    });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  tabs.forEach(function (btn) {
+    btn.addEventListener('click', function () { activateTab(btn.dataset.tab); });
+  });
+
+  document.querySelectorAll('[data-goto]').forEach(function (btn) {
+    btn.addEventListener('click', function () { activateTab(btn.dataset.goto); });
+  });
+
+  // Accordion
+  document.querySelectorAll('.accordion-toggle').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var panel = document.getElementById(btn.getAttribute('aria-controls'));
+      var isOpen = btn.getAttribute('aria-expanded') === 'true';
+      btn.setAttribute('aria-expanded', isOpen ? 'false' : 'true');
+      panel.classList.toggle('open', !isOpen);
+    });
+  });
+</script>
+</body>
+</html>
