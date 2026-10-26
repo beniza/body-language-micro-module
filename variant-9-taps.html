@@ -702,6 +702,8 @@
   var score = 0;
   var quizTotal = document.querySelectorAll('[data-type="quiz"]').length;
   var REFLECT_KEY = 'sil_blm_taps_reflection';
+  // Optional LMS hooks (scorm-bridge.js provides them in the Moodle build); no-ops on the web
+  var tracker = window.ModuleTracker || { start: function () { return null; }, progress: function () {}, complete: function () {} };
 
   cards.forEach(function () {
     var seg = document.createElement('div');
@@ -737,7 +739,12 @@
     prevBtn.disabled = i === 0;
     nextBtn.disabled = i === cards.length - 1;
     card.scrollTop = 0;
-    if (card.dataset.type === 'complete') showScore();
+    if (card.dataset.type === 'complete') {
+      showScore();
+      tracker.complete(score, quizTotal);
+    } else {
+      tracker.progress(i, score);
+    }
     preload(i + 1);
   }
 
@@ -897,7 +904,20 @@
   prevBtn.addEventListener('click', prev);
   nextBtn.addEventListener('click', next);
 
-  show(0);
+  // Resume where the learner left off; checks before that point count as answered
+  var saved = tracker.start();
+  var resumeAt = 0;
+  if (saved && saved.at > 0 && saved.at < cards.length) {
+    resumeAt = saved.at;
+    score = saved.score || 0;
+    for (var r = 0; r < resumeAt; r++) {
+      if (cards[r].querySelector('.options')) {
+        cards[r].dataset.answered = '1';
+        cards[r].querySelectorAll('.option').forEach(function (o) { o.disabled = true; });
+      }
+    }
+  }
+  show(resumeAt);
 })();
 </script>
 </body>
