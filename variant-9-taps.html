@@ -1,0 +1,904 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Mastering Body Language — Tap Through</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #FCFBF8;
+    --beige: #F3EFE9;
+    --sand: #E8DFD2;
+    --warm-grey: #7A7168;
+    --ink: #2B2723;
+    --sil-blue: #0D3C61;
+    --sil-blue-light: #1A5A8F;
+    --accent: #C9A882;
+    --good: #2F6B4F;
+    --bad: #A4472F;
+  }
+  * { box-sizing: border-box; }
+  html, body { height: 100%; margin: 0; }
+  body {
+    font-family: 'Inter', system-ui, sans-serif;
+    color: var(--ink);
+    background: var(--sand);
+    -webkit-font-smoothing: antialiased;
+    overflow: hidden;
+  }
+  button { font: inherit; color: inherit; }
+
+  /* Phone-sized stage: full screen on phones, a centred phone frame on larger screens */
+  .stage {
+    position: relative;
+    width: 100vw;
+    height: 100dvh;
+    margin: 0 auto;
+    background: var(--cream);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+  @media (min-width: 600px) {
+    body { display: flex; align-items: center; justify-content: center; }
+    .stage {
+      width: 420px;
+      height: min(860px, calc(100dvh - 48px));
+      border-radius: 28px;
+      box-shadow: 0 24px 60px rgba(43, 39, 35, 0.18), 0 0 0 1px rgba(43, 39, 35, 0.06);
+    }
+  }
+
+  /* Story-style progress bar */
+  .topbar {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    z-index: 5;
+    padding: calc(10px + env(safe-area-inset-top)) 14px 8px;
+    pointer-events: none;
+  }
+  .segments { display: flex; gap: 3px; }
+  .seg {
+    flex: 1;
+    height: 3px;
+    border-radius: 2px;
+    background: rgba(43, 39, 35, 0.15);
+    overflow: hidden;
+  }
+  .seg > span {
+    display: block;
+    height: 100%;
+    width: 0;
+    background: var(--sil-blue);
+    transition: width 0.3s ease;
+  }
+  .seg.done > span { width: 100%; }
+  .seg.current > span { width: 100%; }
+  .on-dark .seg { background: rgba(255, 255, 255, 0.25); }
+  .on-dark .seg > span { background: #fff; }
+  .meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 8px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--warm-grey);
+  }
+  .on-dark .meta { color: rgba(255, 255, 255, 0.75); }
+
+  /* Cards */
+  .deck { position: relative; flex: 1; }
+  .card {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    padding: calc(56px + env(safe-area-inset-top)) 24px calc(24px + env(safe-area-inset-bottom));
+    overflow-y: auto;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateX(24px);
+    transition: opacity 0.28s ease, transform 0.28s ease, visibility 0s linear 0.28s;
+  }
+  .card.active {
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+    transition: opacity 0.28s ease, transform 0.28s ease, visibility 0s;
+  }
+  .card.before { transform: translateX(-24px); }
+  @media (prefers-reduced-motion: reduce) {
+    .card, .card.active, .card.before { transition: none; transform: none; }
+    .seg > span { transition: none; }
+  }
+
+  .card.theme-blue { background: var(--sil-blue); color: #fff; }
+  .card.theme-sand { background: var(--beige); }
+  .card.theme-cream { background: var(--cream); }
+
+  .eyebrow {
+    margin: 0 0 10px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--sil-blue-light);
+  }
+  .theme-blue .eyebrow { color: var(--accent); }
+  h1, h2 { margin: 0 0 14px; line-height: 1.12; letter-spacing: -0.02em; }
+  h1 { font-size: 40px; font-weight: 800; }
+  h2 { font-size: 27px; font-weight: 800; }
+  p { margin: 0 0 12px; font-size: 17px; line-height: 1.5; }
+  .lead { font-size: 19px; line-height: 1.45; }
+  .muted { color: var(--warm-grey); }
+  .theme-blue .muted { color: rgba(255, 255, 255, 0.75); }
+  .grow { flex: 1; }
+  .center { justify-content: center; }
+  .center > :first-child { margin-top: auto; }
+
+  /* Illustration: always 16:9 + contain so baked-in callouts are never cropped */
+  .figure {
+    position: relative;
+    display: block;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    margin: 0 0 18px;
+    padding: 0;
+    border: 0;
+    border-radius: 14px;
+    background: var(--beige);
+    overflow: hidden;
+    cursor: zoom-in;
+    flex-shrink: 0;
+  }
+  .figure img { width: 100%; height: 100%; object-fit: contain; display: block; }
+  .figure .zoom-hint {
+    position: absolute;
+    right: 8px; bottom: 8px;
+    padding: 4px 8px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 600;
+    background: rgba(43, 39, 35, 0.65);
+    color: #fff;
+  }
+
+  .points { list-style: none; margin: 0; padding: 0; }
+  .points li {
+    position: relative;
+    padding: 10px 0 10px 30px;
+    font-size: 16px;
+    line-height: 1.45;
+    border-top: 1px solid rgba(43, 39, 35, 0.08);
+  }
+  .points li:first-child { border-top: 0; }
+  .points li::before {
+    content: '';
+    position: absolute;
+    left: 4px; top: 17px;
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background: var(--accent);
+  }
+  .theme-blue .points li { border-color: rgba(255, 255, 255, 0.12); }
+
+  .callout {
+    margin-top: 6px;
+    padding: 14px 16px;
+    border-left: 4px solid var(--accent);
+    border-radius: 0 12px 12px 0;
+    background: var(--beige);
+    font-size: 16px;
+    line-height: 1.45;
+  }
+
+  .big-word {
+    font-size: 54px;
+    font-weight: 800;
+    line-height: 1.02;
+    letter-spacing: -0.03em;
+    margin: 0 0 18px;
+  }
+  .big-word span { color: var(--accent); }
+
+  /* Quiz / poll options */
+  .options { display: flex; flex-direction: column; gap: 10px; margin-top: 8px; }
+  .option {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    min-height: 56px;
+    padding: 14px 16px;
+    text-align: left;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 1.35;
+    border-radius: 14px;
+    border: 2px solid rgba(255, 255, 255, 0.35);
+    background: rgba(255, 255, 255, 0.08);
+    color: #fff;
+    cursor: pointer;
+    transition: background 0.15s ease, border-color 0.15s ease;
+  }
+  .option:hover:not(:disabled) { background: rgba(255, 255, 255, 0.16); }
+  .option:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+  .option .mark {
+    flex-shrink: 0;
+    width: 26px; height: 26px;
+    border-radius: 50%;
+    border: 2px solid rgba(255, 255, 255, 0.6);
+    display: grid;
+    place-items: center;
+    font-size: 14px;
+    font-weight: 800;
+  }
+  .option.correct { background: #fff; color: var(--good); border-color: #fff; }
+  .option.correct .mark { background: var(--good); border-color: var(--good); color: #fff; }
+  .option.wrong { background: rgba(164, 71, 47, 0.35); border-color: #E7A08C; }
+  .option.wrong .mark { background: var(--bad); border-color: var(--bad); color: #fff; }
+  .option.picked { background: #fff; color: var(--sil-blue); border-color: #fff; }
+  .option.picked .mark { background: var(--sil-blue); border-color: var(--sil-blue); color: #fff; }
+  .option:disabled { cursor: default; }
+  .option.dim { opacity: 0.55; }
+
+  .feedback {
+    margin-top: 14px;
+    padding: 14px 16px;
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.12);
+    font-size: 15px;
+    line-height: 1.5;
+    display: none;
+  }
+  .feedback.show { display: block; animation: rise 0.25s ease; }
+  .feedback strong { color: var(--accent); }
+  @keyframes rise { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+  @media (prefers-reduced-motion: reduce) { .feedback.show { animation: none; } }
+
+  .nudge { animation: nudge 0.35s ease; }
+  @keyframes nudge {
+    0%, 100% { transform: none; }
+    25% { transform: translateX(-6px); }
+    75% { transform: translateX(6px); }
+  }
+
+  textarea {
+    width: 100%;
+    min-height: 140px;
+    padding: 14px;
+    border-radius: 14px;
+    border: 2px solid var(--sand);
+    background: #fff;
+    font: inherit;
+    font-size: 16px;
+    line-height: 1.5;
+    color: var(--ink);
+    resize: vertical;
+  }
+  textarea:focus { outline: none; border-color: var(--sil-blue-light); }
+
+  /* Buttons */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 52px;
+    padding: 0 26px;
+    border: 0;
+    border-radius: 999px;
+    font-size: 16px;
+    font-weight: 700;
+    background: var(--sil-blue);
+    color: #fff;
+    cursor: pointer;
+  }
+  .btn:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+  .btn.light { background: #fff; color: var(--sil-blue); }
+  .btn.ghost { background: transparent; color: var(--sil-blue); border: 2px solid currentColor; }
+  .theme-blue .btn.ghost { color: #fff; }
+  .btn-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 18px; }
+
+  .tap-hint {
+    margin-top: auto;
+    padding-top: 18px;
+    text-align: center;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--warm-grey);
+  }
+  .theme-blue .tap-hint { color: rgba(255, 255, 255, 0.6); }
+
+  .score-ring {
+    width: 132px; height: 132px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    margin: 0 0 22px;
+    background: conic-gradient(var(--accent) calc(var(--pct) * 1%), rgba(255, 255, 255, 0.15) 0);
+  }
+  .score-ring > div {
+    width: 108px; height: 108px;
+    border-radius: 50%;
+    background: var(--sil-blue);
+    display: grid;
+    place-items: center;
+    font-size: 30px;
+    font-weight: 800;
+  }
+
+  /* Desktop arrows beside the phone frame */
+  .side-nav { display: none; }
+  @media (min-width: 600px) {
+    .side-nav {
+      display: grid;
+      place-items: center;
+      position: fixed;
+      top: 50%;
+      width: 48px; height: 48px;
+      margin-top: -24px;
+      border-radius: 50%;
+      border: 0;
+      background: #fff;
+      color: var(--sil-blue);
+      box-shadow: 0 6px 18px rgba(43, 39, 35, 0.15);
+      cursor: pointer;
+    }
+    .side-nav:disabled { opacity: 0.35; cursor: default; }
+    .side-nav:focus-visible { outline: 3px solid var(--sil-blue-light); outline-offset: 3px; }
+    .side-nav.prev { left: calc(50% - 210px - 72px); }
+    .side-nav.next { left: calc(50% + 210px + 24px); }
+  }
+
+  /* Lightbox */
+  .lightbox {
+    position: fixed;
+    inset: 0;
+    z-index: 50;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    background: rgba(20, 18, 16, 0.92);
+    cursor: zoom-out;
+  }
+  .lightbox.open { display: flex; }
+  .lightbox img { max-width: 100%; max-height: 100%; object-fit: contain; border-radius: 8px; }
+  .lightbox .close {
+    position: absolute;
+    top: calc(14px + env(safe-area-inset-top)); right: 14px;
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    border: 0;
+    background: rgba(255, 255, 255, 0.15);
+    color: #fff;
+    font-size: 22px;
+    cursor: pointer;
+  }
+
+  .sr-only {
+    position: absolute;
+    width: 1px; height: 1px;
+    padding: 0; margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
+  }
+</style>
+</head>
+<body>
+
+<main class="stage" id="stage" aria-roledescription="carousel" aria-label="Body Language micro-module">
+  <div class="topbar" id="topbar">
+    <div class="segments" id="segments" aria-hidden="true"></div>
+    <div class="meta">
+      <span>Body Language</span>
+      <span id="counter"></span>
+    </div>
+  </div>
+
+  <div class="deck" id="deck">
+
+    <!-- 1. Cover -->
+    <section class="card theme-blue center" data-label="Start">
+      <p class="eyebrow">Micro-module &middot; about 5 minutes</p>
+      <h1>Body Language</h1>
+      <p class="lead muted">How you carry yourself speaks before you do. Eight quick lessons, five short checks.</p>
+      <div class="btn-row"><button class="btn light" data-next>Start &rarr;</button></div>
+      <p class="tap-hint">Tap the right side to go on &middot; left side to go back</p>
+    </section>
+
+    <!-- 2. Why it matters -->
+    <section class="card theme-cream" data-label="Why it matters">
+      <button class="figure" data-zoom="images/Image_1_Posture_and_Confidence.png">
+        <img src="images/Image_1_Posture_and_Confidence.png" alt="A professional sits confidently at her desk in a warm, welcoming office, embodying open, approachable posture." loading="lazy">
+        <span class="zoom-hint">Tap to enlarge</span>
+      </button>
+      <p class="eyebrow">Why it matters</p>
+      <h2>Adapt to build understanding</h2>
+      <p>Effective communicators adapt their body language to build understanding.</p>
+      <p class="muted">Awareness of cultural differences in body language demonstrates respect, strengthens relationships, and helps prevent unintended misunderstandings.</p>
+      <p class="tap-hint">Tap to continue</p>
+    </section>
+
+    <!-- 3. Poll -->
+    <section class="card theme-blue" data-label="Quick poll" data-type="poll">
+      <p class="eyebrow">Quick poll</p>
+      <h2>In meetings, how often do you notice your own body language?</h2>
+      <div class="options">
+        <button class="option"><span class="mark">A</span>Hardly ever</button>
+        <button class="option"><span class="mark">B</span>Sometimes</button>
+        <button class="option"><span class="mark">C</span>Most of the time</button>
+      </div>
+      <div class="feedback">There's no wrong answer. Keep your answer in mind as you go through the next few cards.</div>
+      <p class="tap-hint">Choose one, then tap to continue</p>
+    </section>
+
+    <!-- 4. Posture -->
+    <section class="card theme-cream" data-label="Physical Posture">
+      <button class="figure" data-zoom="images/Image_2a_Gestures_and_Meaning.png">
+        <img src="images/Image_2a_Gestures_and_Meaning.png" alt="An employee faces a colleague with an open, upright posture, uncrossed arms, and full attention — annotated with cues: face the speaker, maintain open posture, avoid crossed arms." loading="lazy">
+        <span class="zoom-hint">Tap to enlarge</span>
+      </button>
+      <p class="eyebrow">Lesson 1 &middot; Physical Posture</p>
+      <h2>How you carry your body</h2>
+      <ul class="points">
+        <li>Face the speaker and give them your full attention.</li>
+        <li>Stand or sit with an open, upright posture to project confidence.</li>
+        <li>Avoid closed-off behaviors such as crossed arms, slouching, or looking down.</li>
+        <li>Invite participation through an open posture and welcoming orientation toward others.</li>
+      </ul>
+    </section>
+
+    <!-- 5. Quiz: posture -->
+    <section class="card theme-blue" data-label="Check" data-type="quiz">
+      <p class="eyebrow">Quick check</p>
+      <h2>A colleague is sharing a concern. Which posture says &ldquo;I&rsquo;m listening&rdquo;?</h2>
+      <div class="options">
+        <button class="option"><span class="mark">A</span>Leaning back with arms crossed</button>
+        <button class="option" data-correct><span class="mark">B</span>Facing them, open and upright</button>
+        <button class="option"><span class="mark">C</span>Looking down at your notes</button>
+      </div>
+      <div class="feedback"><strong>Face the speaker</strong> with an open, upright posture. Crossed arms and looking down can read as closed off.</div>
+    </section>
+
+    <!-- 6. Distance -->
+    <section class="card theme-cream" data-label="Physical Distance">
+      <button class="figure" data-zoom="images/Image_3_Responsive_Communication.png">
+        <img src="images/Image_3_Responsive_Communication.png" alt="Two colleagues in conversation across a desk, one leaning slightly forward — annotated with cues: respect personal space, lean forward to listen, adapt to others' comfort." loading="lazy">
+        <span class="zoom-hint">Tap to enlarge</span>
+      </button>
+      <p class="eyebrow">Lesson 2 &middot; Physical Distance</p>
+      <h2>Where you position yourself</h2>
+      <ul class="points">
+        <li>Respect personal space while remaining approachable.</li>
+        <li>Lean slightly forward to signal interest and engagement while listening.</li>
+        <li>Adapt your position and proximity to help others feel comfortable and included.</li>
+      </ul>
+    </section>
+
+    <!-- 7. Facial expression -->
+    <section class="card theme-cream" data-label="Facial Expression">
+      <button class="figure" data-zoom="images/Image_4_Facial_Expression.png">
+        <img src="images/Image_4_Facial_Expression.png" alt="A smiling professional demonstrates warm facial expression — annotated with cues: maintain appropriate eye contact, nod to show understanding, smile to welcome others, match the emotional tone." loading="lazy">
+        <span class="zoom-hint">Tap to enlarge</span>
+      </button>
+      <p class="eyebrow">Lesson 3 &middot; Facial Expression</p>
+      <h2>What your face communicates</h2>
+      <ul class="points">
+        <li>Maintain appropriate eye contact to communicate honesty and attentiveness.</li>
+        <li>Nod occasionally and use appropriate facial expressions to show understanding.</li>
+        <li>Smile genuinely when appropriate to create a welcoming atmosphere.</li>
+        <li>Match your facial expressions to the emotional tone of the conversation.</li>
+      </ul>
+    </section>
+
+    <!-- 8. Quiz: facial expression -->
+    <section class="card theme-blue" data-label="Check" data-type="quiz">
+      <p class="eyebrow">Quick check</p>
+      <h2>A colleague tells you some difficult news. What should your face do?</h2>
+      <div class="options">
+        <button class="option"><span class="mark">A</span>Keep a big smile to lighten the mood</button>
+        <button class="option" data-correct><span class="mark">B</span>Match the emotional tone of the conversation</button>
+        <button class="option"><span class="mark">C</span>Stay completely blank</button>
+      </div>
+      <div class="feedback"><strong>Match the tone.</strong> Smile genuinely when it fits; in a hard conversation, a calm, attentive face shows you understand.</div>
+    </section>
+
+    <!-- 9. Demeanor -->
+    <section class="card theme-cream" data-label="Demeanor">
+      <button class="figure" data-zoom="images/Image_5_Demeanor.png">
+        <img src="images/Image_5_Demeanor.png" alt="A composed professional gestures naturally while speaking — annotated with cues: match tone with body, use natural hand gestures, avoid distracted behaviors, stay calm under pressure." loading="lazy">
+        <span class="zoom-hint">Tap to enlarge</span>
+      </button>
+      <p class="eyebrow">Lesson 4 &middot; Demeanor</p>
+      <h2>The tone you project</h2>
+      <ul class="points">
+        <li>Ensure your body language matches the tone of the words you are saying.</li>
+        <li>Show respect by avoiding behaviors that suggest impatience or distraction.</li>
+        <li>Maintain a calm, steady presence, especially during difficult conversations.</li>
+        <li>Use natural, purposeful hand gestures to reinforce important ideas.</li>
+      </ul>
+    </section>
+
+    <!-- 10. True / false -->
+    <section class="card theme-blue" data-label="Check" data-type="quiz">
+      <p class="eyebrow">True or false?</p>
+      <h2>Glancing at your phone while someone talks is fine, as long as you keep nodding.</h2>
+      <div class="options">
+        <button class="option"><span class="mark">T</span>True</button>
+        <button class="option" data-correct><span class="mark">F</span>False</button>
+      </div>
+      <div class="feedback"><strong>False.</strong> Show respect by avoiding behaviors that suggest impatience or distraction. Nodding doesn&rsquo;t cancel out a wandering eye.</div>
+    </section>
+
+    <!-- 11. Part 2 divider -->
+    <section class="card theme-sand center" data-label="Part 2">
+      <p class="eyebrow">Part 2 &middot; Across cultures</p>
+      <p class="big-word">Observe.<br>Adapt.<br><span>Ask.</span></p>
+      <p class="lead muted">The same gesture can mean different things in different places. Here&rsquo;s how to stay respectful.</p>
+      <p class="tap-hint">Tap to continue</p>
+    </section>
+
+    <!-- 12. Cultural differences -->
+    <section class="card theme-cream" data-label="Cultural Differences">
+      <button class="figure" data-zoom="images/Image_6_Cultural_Differences.png">
+        <img src="images/Image_6_Cultural_Differences.png" alt="A professional stands amid a global network of connected colleagues, illustrating the need to recognize cultural differences, avoid assuming universal rules, and observe, adapt, and ask." loading="lazy">
+        <span class="zoom-hint">Tap to enlarge</span>
+      </button>
+      <p class="eyebrow">Lesson 5 &middot; Cultural Differences</p>
+      <h2>Tendencies, not rules</h2>
+      <p>Be aware of cultural differences in gestures, eye contact, personal space, and levels of formality.</p>
+      <p class="muted">The following points describe general cultural tendencies, not universal rules. Individual preferences, regional customs, and organizational culture should always be considered.</p>
+      <div class="callout">When in doubt, observe first, adapt respectfully, and ask questions when appropriate.</div>
+    </section>
+
+    <!-- 13. Formal vs informal -->
+    <section class="card theme-cream" data-label="Formal vs. Informal">
+      <button class="figure" data-zoom="images/Image_7_Formal_vs_Informal_Posture.png">
+        <img src="images/Image_7_Formal_vs_Informal_Posture.png" alt="A professional shown between a relaxed Western posture icon and a formal Eastern posture icon, captioned West: relaxed but attentive, East: formal and controlled, start formal then adjust." loading="lazy">
+        <span class="zoom-hint">Tap to enlarge</span>
+      </button>
+      <p class="eyebrow">Lesson 6 &middot; Formal vs. Informal</p>
+      <h2>Posture across cultures</h2>
+      <ul class="points">
+        <li>Western workplaces often encourage relaxed but attentive posture and expressive gestures.</li>
+        <li>Many Eastern cultures place greater emphasis on formal posture, controlled movements, and showing respect through physical demeanor.</li>
+      </ul>
+      <div class="callout">When in doubt, begin with a more formal posture and adjust as you observe the communication style of those around you.</div>
+    </section>
+
+    <!-- 14. Quiz: formality -->
+    <section class="card theme-blue" data-label="Check" data-type="quiz">
+      <p class="eyebrow">Scenario</p>
+      <h2>You meet a senior leader from a culture you don&rsquo;t know well. How do you start?</h2>
+      <div class="options">
+        <button class="option"><span class="mark">A</span>Relaxed and casual, to put them at ease</button>
+        <button class="option" data-correct><span class="mark">B</span>More formal, then adjust as you observe</button>
+        <button class="option"><span class="mark">C</span>Exactly as you would at home</button>
+      </div>
+      <div class="feedback"><strong>Start formal, then adjust.</strong> It&rsquo;s easier to relax a formal start than to recover from one that felt too casual.</div>
+    </section>
+
+    <!-- 15. Personal distance -->
+    <section class="card theme-cream" data-label="Personal Distance">
+      <button class="figure" data-zoom="images/Image_8_Personal_Distance.png">
+        <img src="images/Image_8_Personal_Distance.png" alt="A professional gestures openly beside a comparison of spacing conventions, captioned West: prefers more space, East: closer proximity common, observe and adapt distance." loading="lazy">
+        <span class="zoom-hint">Tap to enlarge</span>
+      </button>
+      <p class="eyebrow">Lesson 7 &middot; Personal Distance</p>
+      <h2>How close is comfortable?</h2>
+      <ul class="points">
+        <li>Many Western cultures (North America, Northern Europe) generally prefer more personal space during conversation.</li>
+        <li>Many Eastern cultures are often more comfortable standing closer to people they know well, though preferences vary widely by country and context.</li>
+      </ul>
+      <div class="callout">Observe and adapt to the other person&rsquo;s comfort level rather than assuming your own preference is universal.</div>
+    </section>
+
+    <!-- 16. Eye contact -->
+    <section class="card theme-cream" data-label="Eye Contact">
+      <button class="figure" data-zoom="images/Image_9_Cultural_Eye_Contact.png">
+        <img src="images/Image_9_Cultural_Eye_Contact.png" alt="Two colleagues in conversation across a desk, captioned West: direct eye contact, East: prolonged contact may be seen as disrespectful, aim for respectful comfort." loading="lazy">
+        <span class="zoom-hint">Tap to enlarge</span>
+      </button>
+      <p class="eyebrow">Lesson 8 &middot; Eye Contact</p>
+      <h2>Where to look</h2>
+      <ul class="points">
+        <li>Many Western cultures view direct eye contact as a sign of confidence, honesty, and engagement.</li>
+        <li>In some Eastern cultures, prolonged eye contact&mdash;particularly with elders or authority figures&mdash;may be viewed as disrespectful or confrontational.</li>
+      </ul>
+      <div class="callout">Aim for comfortable, respectful eye contact while remaining sensitive to cultural expectations.</div>
+    </section>
+
+    <!-- 17. Quiz: eye contact -->
+    <section class="card theme-blue" data-label="Check" data-type="quiz">
+      <p class="eyebrow">Quick check</p>
+      <h2>In some Eastern cultures, long eye contact with an elder may be seen as&hellip;</h2>
+      <div class="options">
+        <button class="option"><span class="mark">A</span>A sign of confidence</button>
+        <button class="option" data-correct><span class="mark">B</span>Disrespectful or confrontational</button>
+        <button class="option"><span class="mark">C</span>A sign of honesty</button>
+      </div>
+      <div class="feedback"><strong>Disrespectful or confrontational.</strong> What signals honesty in one place can signal challenge in another, so aim for comfortable, respectful eye contact.</div>
+    </section>
+
+    <!-- 18. Recap -->
+    <section class="card theme-cream" data-label="Recap">
+      <button class="figure" data-zoom="images/Image_1a_Posture_and_Confidence.png">
+        <img src="images/Image_1a_Posture_and_Confidence.png" alt="Two colleagues shake hands warmly, captioned Cultural Awareness in Profession: adapt posture to connect, respect cultural differences, prevent unintended misunderstandings." loading="lazy">
+        <span class="zoom-hint">Tap to enlarge</span>
+      </button>
+      <p class="eyebrow">Recap</p>
+      <h2>Four things to remember</h2>
+      <ul class="points">
+        <li>Face the speaker with an open, upright posture.</li>
+        <li>Respect personal space; lean in to listen.</li>
+        <li>Let your face and body match your words.</li>
+        <li>Across cultures: start formal, observe, adapt, ask.</li>
+      </ul>
+    </section>
+
+    <!-- 19. Reflection -->
+    <section class="card theme-sand" data-label="Reflect" data-type="reflect">
+      <p class="eyebrow">Your turn</p>
+      <h2>Think of a conversation you have coming up this week.</h2>
+      <p class="muted">What one thing will you do differently with your body language?</p>
+      <label for="reflection" class="sr-only">Your reflection</label>
+      <textarea id="reflection" placeholder="For example: I'll put my phone away and face them fully."></textarea>
+      <p class="muted" style="font-size:13px;margin-top:8px;">Saved only on this device, just for you.</p>
+      <div class="btn-row"><button class="btn" data-save>Save &amp; continue</button></div>
+    </section>
+
+    <!-- 20. Complete -->
+    <section class="card theme-blue center" data-label="Complete" data-type="complete">
+      <div class="score-ring" id="scoreRing" style="--pct:0"><div id="scoreText">0/5</div></div>
+      <p class="eyebrow">Module complete</p>
+      <h2>Well done!</h2>
+      <p class="lead muted" id="scoreMsg">You finished Body Language.</p>
+      <div class="btn-row">
+        <button class="btn light" data-restart>Start again</button>
+      </div>
+    </section>
+
+  </div>
+
+  <p class="sr-only" aria-live="polite" id="live"></p>
+</main>
+
+<button class="side-nav prev" id="prevBtn" aria-label="Previous card">
+  <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M13 4l-6 6 6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+</button>
+<button class="side-nav next" id="nextBtn" aria-label="Next card">
+  <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M7 4l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+</button>
+
+<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Enlarged illustration">
+  <button class="close" aria-label="Close">&times;</button>
+  <img alt="">
+</div>
+
+<script>
+(function () {
+  var cards = Array.prototype.slice.call(document.querySelectorAll('.card'));
+  var segWrap = document.getElementById('segments');
+  var topbar = document.getElementById('topbar');
+  var counter = document.getElementById('counter');
+  var live = document.getElementById('live');
+  var prevBtn = document.getElementById('prevBtn');
+  var nextBtn = document.getElementById('nextBtn');
+  var lightbox = document.getElementById('lightbox');
+  var lightImg = lightbox.querySelector('img');
+  var current = 0;
+  var score = 0;
+  var quizTotal = document.querySelectorAll('[data-type="quiz"]').length;
+  var REFLECT_KEY = 'sil_blm_taps_reflection';
+
+  cards.forEach(function () {
+    var seg = document.createElement('div');
+    seg.className = 'seg';
+    seg.appendChild(document.createElement('span'));
+    segWrap.appendChild(seg);
+  });
+  var segs = segWrap.children;
+
+  // A quiz or poll must be answered before moving on, like 7taps
+  function isBlocked(card) {
+    var type = card.dataset.type;
+    return (type === 'quiz' || type === 'poll') && !card.dataset.answered;
+  }
+
+  function show(i) {
+    if (i < 0 || i >= cards.length) return;
+    current = i;
+    cards.forEach(function (c, k) {
+      c.classList.toggle('active', k === i);
+      c.classList.toggle('before', k < i);
+      c.setAttribute('aria-hidden', k === i ? 'false' : 'true');
+      c.inert = k !== i;
+    });
+    for (var k = 0; k < segs.length; k++) {
+      segs[k].classList.toggle('done', k < i);
+      segs[k].classList.toggle('current', k === i);
+    }
+    var card = cards[i];
+    topbar.classList.toggle('on-dark', card.classList.contains('theme-blue'));
+    counter.textContent = (i + 1) + ' / ' + cards.length;
+    live.textContent = 'Card ' + (i + 1) + ' of ' + cards.length + ': ' + (card.dataset.label || '');
+    prevBtn.disabled = i === 0;
+    nextBtn.disabled = i === cards.length - 1;
+    card.scrollTop = 0;
+    if (card.dataset.type === 'complete') showScore();
+    preload(i + 1);
+  }
+
+  function next() {
+    var card = cards[current];
+    if (isBlocked(card)) {
+      var opts = card.querySelector('.options');
+      opts.classList.remove('nudge');
+      void opts.offsetWidth;
+      opts.classList.add('nudge');
+      return;
+    }
+    show(current + 1);
+  }
+  function prev() { show(current - 1); }
+
+  function preload(i) {
+    if (!cards[i]) return;
+    var img = cards[i].querySelector('img');
+    if (img) img.loading = 'eager';
+  }
+
+  // Quizzes and polls
+  cards.forEach(function (card) {
+    var type = card.dataset.type;
+    if (type !== 'quiz' && type !== 'poll') return;
+    var options = card.querySelectorAll('.option');
+    var feedback = card.querySelector('.feedback');
+    options.forEach(function (opt) {
+      opt.addEventListener('click', function () {
+        if (card.dataset.answered) return;
+        card.dataset.answered = '1';
+        options.forEach(function (o) { o.disabled = true; });
+        if (type === 'poll') {
+          opt.classList.add('picked');
+          options.forEach(function (o) { if (o !== opt) o.classList.add('dim'); });
+        } else {
+          var right = opt.hasAttribute('data-correct');
+          if (right) score++;
+          options.forEach(function (o) {
+            if (o.hasAttribute('data-correct')) {
+              o.classList.add('correct');
+              o.querySelector('.mark').textContent = '✓';
+            } else if (o === opt) {
+              o.classList.add('wrong');
+              o.querySelector('.mark').textContent = '✕';
+            } else {
+              o.classList.add('dim');
+            }
+          });
+          feedback.insertAdjacentHTML('afterbegin', right ? 'Correct! ' : 'Not quite. ');
+        }
+        feedback.classList.add('show');
+        if (!card.querySelector('.continue')) {
+          var row = document.createElement('div');
+          row.className = 'btn-row';
+          row.innerHTML = '<button class="btn light continue" data-next>Continue &rarr;</button>';
+          card.insertBefore(row, card.querySelector('.tap-hint'));
+          row.querySelector('button').focus();
+        }
+      });
+    });
+  });
+
+  // Reflection, kept only in this browser
+  var textarea = document.getElementById('reflection');
+  try { textarea.value = window.localStorage.getItem(REFLECT_KEY) || ''; } catch (e) {}
+  textarea.addEventListener('input', function () {
+    try { window.localStorage.setItem(REFLECT_KEY, textarea.value); } catch (e) {}
+  });
+
+  function showScore() {
+    var pct = quizTotal ? Math.round(score / quizTotal * 100) : 0;
+    document.getElementById('scoreRing').style.setProperty('--pct', pct);
+    document.getElementById('scoreText').textContent = score + '/' + quizTotal;
+    document.getElementById('scoreMsg').textContent = score === quizTotal
+      ? 'A perfect score. You’re ready to put it into practice.'
+      : 'You got ' + score + ' of ' + quizTotal + ' checks right. Go back through any card to review.';
+  }
+
+  function restart() {
+    score = 0;
+    cards.forEach(function (card) {
+      if (!card.dataset.answered) return;
+      delete card.dataset.answered;
+      card.querySelectorAll('.option').forEach(function (o) {
+        o.disabled = false;
+        o.classList.remove('correct', 'wrong', 'picked', 'dim');
+      });
+      card.querySelectorAll('.option .mark').forEach(function (m, k) {
+        m.textContent = card.querySelectorAll('.option').length === 2 ? (k === 0 ? 'T' : 'F') : 'ABC'[k];
+      });
+      var fb = card.querySelector('.feedback');
+      fb.classList.remove('show');
+      fb.innerHTML = fb.innerHTML.replace(/^(Correct! |Not quite\. )/, '');
+      var cont = card.querySelector('.continue');
+      if (cont) cont.parentNode.remove();
+    });
+    show(0);
+  }
+
+  // Lightbox
+  function openLightbox(src, alt) {
+    lightImg.src = src;
+    lightImg.alt = alt;
+    lightbox.classList.add('open');
+    lightbox.querySelector('.close').focus();
+  }
+  function closeLightbox() {
+    lightbox.classList.remove('open');
+    var fig = cards[current].querySelector('.figure');
+    if (fig) fig.focus();
+  }
+  lightbox.addEventListener('click', closeLightbox);
+
+  // Tap zones: left third goes back, the rest goes forward, unless the tap hit a control
+  document.getElementById('deck').addEventListener('click', function (e) {
+    var t = e.target;
+    if (t.closest('[data-next]')) { next(); return; }
+    if (t.closest('[data-restart]')) { restart(); return; }
+    if (t.closest('[data-save]')) { next(); return; }
+    var fig = t.closest('.figure');
+    if (fig) { openLightbox(fig.dataset.zoom, fig.querySelector('img').alt); return; }
+    if (t.closest('button, a, textarea, input, label')) return;
+    if (window.getSelection && String(window.getSelection())) return;
+    var rect = cards[current].getBoundingClientRect();
+    if (e.clientX - rect.left < rect.width / 3) prev(); else next();
+  });
+
+  // Swipe
+  var sx = null, sy = null;
+  var deck = document.getElementById('deck');
+  deck.addEventListener('touchstart', function (e) {
+    sx = e.touches[0].clientX; sy = e.touches[0].clientY;
+  }, { passive: true });
+  deck.addEventListener('touchend', function (e) {
+    if (sx === null) return;
+    var dx = e.changedTouches[0].clientX - sx;
+    var dy = e.changedTouches[0].clientY - sy;
+    sx = sy = null;
+    if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.5) {
+      e.preventDefault();
+      if (dx < 0) next(); else prev();
+    }
+  });
+
+  document.addEventListener('keydown', function (e) {
+    if (lightbox.classList.contains('open')) {
+      if (e.key === 'Escape') closeLightbox();
+      return;
+    }
+    if (e.target.tagName === 'TEXTAREA') return;
+    if (e.key === 'ArrowRight' || e.key === 'PageDown') { e.preventDefault(); next(); }
+    else if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); prev(); }
+    else if (e.key === 'Home') { e.preventDefault(); show(0); }
+  });
+  prevBtn.addEventListener('click', prev);
+  nextBtn.addEventListener('click', next);
+
+  show(0);
+})();
+</script>
+</body>
+</html>
